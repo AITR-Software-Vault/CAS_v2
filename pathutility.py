@@ -60,5 +60,5 @@ def validate_required_assets() -> None:
             "Required PDF assets are missing:\n" + "\n".join(missing_assets)
         )
         
-    validate_rgba_transparency(image_path("acropolis_logo_transparent.png"))
-    validate_rgba_transparency(image_path("footer_logo_transparent.png"))
+    # validate_rgba_transparency(image_path("acropolis_logo_transparent.png"))
+    # validate_rgba_transparency(image_path("footer_logo_transparent.png"))

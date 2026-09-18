@@ -99,24 +99,24 @@ def draw_suggestion_cell(pdf, x, y, width, height, title, description, icon_file
     
     padding_x = 4
     padding_y = 4
-    icon_size = 6
+    icon_size = 4
     
     draw_icon(pdf, icon_file, x=x + padding_x, y=y + padding_y, size=icon_size)
     
     title_x = x + padding_x + icon_size + 2
     pdf.set_xy(title_x, y + padding_y)
-    pdf.set_font("DejaVu", "B", 10)
+    pdf.set_font("Arial", "B", 10)
     pdf.set_text_color(*TITLE_COLOR)
     pdf.cell(width - (title_x - x) - padding_x, icon_size, title, align="L")
     
     desc_y = y + padding_y + icon_size + 2
     pdf.set_xy(x + padding_x, desc_y)
-    pdf.set_font("DejaVu", "", 9)
+    pdf.set_font("Arial", "", 9)
     pdf.set_text_color(*BODY_COLOR)
     pdf.multi_cell(width - (padding_x * 2), 5, description, align="L")
 
 def render_gentle_everyday_suggestions_page(pdf):
-    pdf.set_font("DejaVu", "B", 14)
+    pdf.set_font("Arial", "B", 14)
     pdf.set_text_color(62, 190, 180)
     pdf.cell(0, 10, "Gentle Everyday Suggestions", new_x="LMARGIN", new_y="NEXT")
 
@@ -138,7 +138,7 @@ def render_gentle_everyday_suggestions_page(pdf):
         item2 = suggestions[i*2+1]
         
         # Calculate dynamic height
-        pdf.set_font("DejaVu", "", 9)
+        pdf.set_font("Arial", "", 9)
         h1 = pdf.get_multi_cell_height(card_w - 8, 5, item1[1])
         h2 = pdf.get_multi_cell_height(card_w - 8, 5, item2[1])
         content_h = max(h1, h2)
@@ -157,8 +157,10 @@ def create_v2_report(filepath, student_name, course, year, institute, scores, ba
     validate_required_assets()
 
     pdf = V2ReportPDF()
-    pdf.add_font("DejaVu", "", str(font_path("DejaVuSans.ttf")))
-    pdf.add_font("DejaVu", "B", str(font_path("DejaVuSans-Bold.ttf")))
+    pdf.add_font("Arial", "", str(font_path("arial.ttf")))
+    pdf.add_font("Arial", "B", str(font_path("arialbd.ttf")))
+    pdf.add_font("SegoeSymbol", "", str(font_path("symbol.ttf")))
+    pdf.set_fallback_fonts(["SegoeSymbol"])
     pdf.set_auto_page_break(auto=False)
     
     # colors
@@ -177,13 +179,13 @@ def create_v2_report(filepath, student_name, course, year, institute, scores, ba
     pdf.text_mode = "FILL"
     # pdf.set_text_color(0, 0, 0)
     # # pdf.set_font("Times", "I", 20)
-    # pdf.set_font("Times", style="I", size=14)
+    # pdf.set_font("Times", style="B", size=23)
     # pdf.cell(0, 10, "PSYCHOMETRIC ASSESSMENT REPORT", align="C", new_x="LMARGIN", new_y="NEXT")
     # Set text color to pure black (RGB: 0, 0, 0)
     pdf.set_text_color(0, 0, 0)
     
     # Make sure your font style is set (e.g., Times Italic)
-    pdf.set_font("Times", style="I", size=14)
+    pdf.set_font("Times", style="B", size=23)
     
     # Print your cell
     pdf.cell(
@@ -197,9 +199,9 @@ def create_v2_report(filepath, student_name, course, year, institute, scores, ba
     pdf.cell(0, 15, "2026-27", align="C", new_x="LMARGIN", new_y="NEXT")
     
     pdf.set_y(250)
-    pdf.set_font("DejaVu", "B", 14)
+    pdf.set_font("Arial", "B", 14)
     pdf.cell(0, 10, "PREPARED FOR-", align="C", new_x="LMARGIN", new_y="NEXT")
-    pdf.set_font("DejaVu", "B", 12)
+    pdf.set_font("Arial", "B", 12)
     footer_text = f"{student_name} | {course} | {year} | {institute}"
     pdf.cell(0, 10, footer_text, align="C", new_x="LMARGIN", new_y="NEXT")
     
@@ -217,25 +219,25 @@ def create_v2_report(filepath, student_name, course, year, institute, scores, ba
         pdf.image(illus2, x=20, y=200, w=60)
         
     pdf.set_y(60)
-    pdf.set_font("DejaVu", "B", 18)
+    pdf.set_font("Arial", "B", 18)
     pdf.set_text_color(*GREEN_TEXT)
     pdf.cell(0, 10, f"Hello {student_name},", new_x="LMARGIN", new_y="NEXT")
     pdf.ln(10)
     
-    pdf.set_font("DejaVu", "B", 12)
+    pdf.set_font("Arial", "B", 12)
     pdf.multi_cell(0, 6, "We're glad you took a few minutes for yourself to complete this assessment.\nThat's already a meaningful first step.", new_x="LMARGIN", new_y="NEXT")
     pdf.ln(5)
     
-    pdf.set_font("DejaVu", "", 12)
+    pdf.set_font("Arial", "", 12)
     pdf.set_text_color(0, 0, 0)
     pdf.multi_cell(0, 6, "This report reflects your responses across nine areas of everyday student life. There's no right or wrong here, it's simply a snapshot to help you understand what's feeling heavy right now, and where things are already going well.", new_x="LMARGIN", new_y="NEXT")
     pdf.ln(5)
     
-    pdf.set_font("DejaVu", "B", 12)
+    pdf.set_font("Arial", "B", 12)
     pdf.set_text_color(*GREEN_TEXT)
     pdf.cell(0, 10, "The nine areas we looked at:", new_x="LMARGIN", new_y="NEXT")
     
-    pdf.set_font("DejaVu", "B", 12)
+    pdf.set_font("Arial", "B", 12)
     pdf.set_text_color(50, 100, 150)
     domains = ["Anxiety", "Depression", "Suicidal Ideation", "Substance Abuse", "Self-Esteem Problems", "Interpersonal Problems", "Family Problems", "Academic Stress", "Career Concerns"]
     for d in domains:
@@ -245,10 +247,10 @@ def create_v2_report(filepath, student_name, course, year, institute, scores, ba
     # ---------------- PAGE 3 ----------------
     pdf.add_page()
     pdf.set_y(20)
-    pdf.set_font("DejaVu", "B", 18)
+    pdf.set_font("Arial", "B", 18)
     pdf.set_text_color(*GREEN_TEXT)
     pdf.cell(0, 10, "Understanding This Assessment", new_x="LMARGIN", new_y="NEXT")
-    pdf.set_font("DejaVu", "", 12)
+    pdf.set_font("Arial", "", 12)
     pdf.set_text_color(0, 0, 0)
     pdf.multi_cell(0, 6, "This assessment looks at nine areas of a student's day-to-day experience over the past two weeks. Together they build a rounded picture of wellbeing, not a label, but a starting point for a supportive conversation.", new_x="LMARGIN", new_y="NEXT")
     pdf.ln(5)
@@ -272,9 +274,9 @@ def create_v2_report(filepath, student_name, course, year, institute, scores, ba
     
     for row in table_data:
         # Calculate heights
-        pdf.set_font("DejaVu", "B", 10)
+        pdf.set_font("Arial", "B", 10)
         h1 = pdf.get_multi_cell_height(col_w1, row_h_base, row[0])
-        pdf.set_font("DejaVu", "", 10)
+        pdf.set_font("Arial", "", 10)
         h2 = pdf.get_multi_cell_height(col_w2, row_h_base, row[1])
         
         row_height = max(h1, h2) + 4
@@ -287,7 +289,7 @@ def create_v2_report(filepath, student_name, course, year, institute, scores, ba
         # Draw cells
         pdf.set_fill_color(*row[2])
         pdf.set_text_color(255, 255, 255)
-        pdf.set_font("DejaVu", "B", 10)
+        pdf.set_font("Arial", "B", 10)
         
         # Draw background and text for column 1
         pdf.rect(x_before, y_before, col_w1, row_height, 'DF')
@@ -297,7 +299,7 @@ def create_v2_report(filepath, student_name, course, year, institute, scores, ba
         # Draw background and text for column 2
         pdf.set_fill_color(245, 245, 245)
         pdf.set_text_color(0, 0, 0)
-        pdf.set_font("DejaVu", "", 10)
+        pdf.set_font("Arial", "", 10)
         
         pdf.rect(x_before + col_w1, y_before, col_w2, row_height, 'DF')
         pdf.set_xy(x_before + col_w1 + 2, y_before + 2)
@@ -305,113 +307,213 @@ def create_v2_report(filepath, student_name, course, year, institute, scores, ba
         
         pdf.set_xy(x_before, y_before + row_height)
 
-    # ---------------- PAGE 4 ----------------
+        # ---------------- PAGE 4 ----------------
     pdf.add_page()
     pdf.set_y(20)
-    pdf.set_font("DejaVu", "B", 16)
-    pdf.set_text_color(*GREEN_TEXT)
-    pdf.cell(0, 10, "Assessment Summary & Safety", new_x="LMARGIN", new_y="NEXT")
-    
-    pdf.set_fill_color(30, 80, 80)
+    pdf.set_font("Arial", "B", 13.5)
+    pdf.set_text_color(30, 95, 90) # #1e5f5a
+    pdf.cell(0, 10, "Assessment Summary", new_x="LMARGIN", new_y="NEXT")
+    pdf.ln(2)
+
+    # Header
+    pdf.set_fill_color(30, 95, 90)
     pdf.set_text_color(255, 255, 255)
-    pdf.set_font("DejaVu", "B", 10)
-    pdf.cell(80, 10, "Domain", border=1, fill=True, align="L")
-    pdf.cell(40, 10, "Score", border=1, fill=True, align="C")
-    pdf.cell(70, 10, "Relative Band", border=1, fill=True, align="C", new_x="LMARGIN", new_y="NEXT")
+    pdf.set_draw_color(199, 219, 217) # Light teal borders
+    pdf.set_line_width(0.3)
+    pdf.set_font("Arial", "B", 10)
     
-    pdf.set_text_color(0, 0, 0)
+    # Save x for tables
+    start_x = pdf.get_x()
+    
+    pdf.cell(80, 8, " Domain", border=1, fill=True, align="L")
+    pdf.cell(40, 8, "Score", border=1, fill=True, align="C")
+    pdf.cell(60, 8, "Relative Band", border=1, fill=True, align="C", new_x="LMARGIN", new_y="NEXT")
+
     domain_names = ["Anxiety", "Depression", "Suicidal Ideation", "Substance Abuse", "Self-Esteem Problems", "Interpersonal Problems", "Family Problems", "Academic Stress", "Career Concerns"]
-    
+
     higher_domains = []
     moderate_domains = []
     strength_domains = []
     
+    # Helper to draw a thick red border around a specific row
+    def draw_thick_red_border(y_pos):
+        # Save state
+        
+        pdf.set_draw_color(192, 67, 60) # #c0433c Red border
+        pdf.set_line_width(0.8)
+        pdf.rect(start_x, y_pos, 180, 8, 'D')
+        # Restore
+        pdf.set_draw_color(199, 219, 217)
+        pdf.set_line_width(0.3)
+
     for i, d in enumerate(domain_names):
         score = scores[i]
         band = bands[i]
         
+        y_pos = pdf.get_y()
+        is_higher = False
+
         if d == 'Substance Abuse':
-            band_text = "Any concern" if score > 0 else "None"
             pdf.set_fill_color(255, 255, 255)
-            pdf.set_text_color(*(ORANGE_TEXT if score > 0 else GREEN_TEXT))
-            pdf.set_font("DejaVu", "", 10)
-            pdf.cell(80, 10, d, border=1, fill=False)
-            pdf.cell(40, 10, f"{score} / 24", border=1, fill=False, align="C")
-            pdf.cell(70, 10, "Not banded", border=1, fill=False, align="C", new_x="LMARGIN", new_y="NEXT")
-            if score > 0:
-                moderate_domains.append((d, score)) # put in moderate list for recommendations
+            pdf.set_text_color(0, 0, 0)
+            pdf.set_font("Arial", "", 10)
+            pdf.cell(80, 8, f" {d}", border=1, fill=True)
+            pdf.set_font("Arial", "B", 10)
+            pdf.cell(40, 8, f"{score} / 24", border=1, fill=True, align="C")
+            pdf.set_text_color(*GREEN_TEXT)
+            pdf.cell(60, 8, "Lower Relative", border=1, fill=True, align="C", new_x="LMARGIN", new_y="NEXT")
+            strength_domains.append(d)
             continue
 
         if band == 'Higher Relative':
             higher_domains.append((d, score))
-            pdf.set_fill_color(255, 230, 230)
-            pdf.set_text_color(*RED_TEXT)
-            prefix = "* "
+            pdf.set_fill_color(249, 230, 230) # #f9e6e6 Light red fill
+            pdf.set_text_color(192, 67, 60) # Red text
             band_text = "Higher Relative"
-            band = "Higher"
+            is_higher = True
         elif band == 'Moderate Relative':
             moderate_domains.append((d, score))
             pdf.set_fill_color(255, 255, 255)
             pdf.set_text_color(*ORANGE_TEXT)
-            prefix = ""
             band_text = "Moderate Relative"
         elif band == 'Mild Relative':
             pdf.set_fill_color(255, 255, 255)
             pdf.set_text_color(*GREEN_TEXT)
-            prefix = ""
             band_text = "Mild Relative"
         else:
             if score == 0:
                 strength_domains.append(d)
             pdf.set_fill_color(255, 255, 255)
             pdf.set_text_color(*GREEN_TEXT)
-            prefix = ""
             band_text = "Lower Relative"
-            
-        pdf.set_font("DejaVu", "B" if band == 'Higher' else "", 10)
-        pdf.cell(80, 10, prefix + d, border=1, fill=(band=='Higher'))
-        pdf.cell(40, 10, f"{score} / 24", border=1, fill=(band=='Higher'), align="C")
-        pdf.cell(70, 10, band_text, border=1, fill=(band=='Higher'), align="C", new_x="LMARGIN", new_y="NEXT")
 
-    pdf.ln(10)
-    pdf.set_font("DejaVu", "B", 14)
-    pdf.set_text_color(60, 180, 160)
-    pdf.cell(0, 10, "Safety Status", new_x="LMARGIN", new_y="NEXT")
-    
-    pdf.set_fill_color(*GREEN_BG)
-    pdf.set_draw_color(*GREEN_TEXT)
-    pdf.set_line_width(0.5)
-    
+        if is_higher:
+            # Special rendering for higher relative row
+            pdf.set_text_color(0, 0, 0)
+            pdf.set_font("SegoeSymbol", "", 10)
+            pdf.cell(5, 8, u" ★", border="LBT", fill=True)
+            pdf.set_font("Arial", "B", 10)
+            pdf.cell(75, 8, f" {d}", border="RBT", fill=True)
+            pdf.cell(40, 8, f"{score} / 24", border=1, fill=True, align="C")
+            pdf.set_text_color(192, 67, 60)
+            pdf.cell(60, 8, band_text, border=1, fill=True, align="C")
+            draw_thick_red_border(y_pos)
+            pdf.ln(8)
+        else:
+            pdf.set_font("Arial", "", 10)
+            pdf.set_text_color(0, 0, 0)
+            pdf.cell(80, 8, f" {d}", border=1, fill=True)
+            pdf.set_font("Arial", "B", 10)
+            pdf.cell(40, 8, f"{score} / 24", border=1, fill=True, align="C")
+            
+            pdf.set_text_color(*ORANGE_TEXT if band == 'Moderate Relative' else GREEN_TEXT)
+            pdf.cell(60, 8, band_text, border=1, fill=True, align="C", new_x="LMARGIN", new_y="NEXT")
+
+    pdf.ln(8)
+    pdf.set_line_width(0.3)
+
+    # SAFETY STATUS BOX
     if critical_flag:
         pdf.set_fill_color(255, 230, 230)
         pdf.set_draw_color(*RED_TEXT)
-        pdf.set_text_color(*RED_TEXT)
-        pdf.cell(0, 10, " CRITICAL SAFETY FLAG DETECTED.", border="LTR", fill=True, new_x="LMARGIN", new_y="NEXT")
-        pdf.set_font("DejaVu", "", 12)
-        pdf.set_text_color(0, 0, 0)
-        pdf.multi_cell(0, 8, "Please connect with a counselor immediately.\nOne or more critical safety items were endorsed by the student.", border="LBR", fill=True, new_x="LMARGIN", new_y="NEXT")
-    else:
-        pdf.set_text_color(*GREEN_TEXT)
-        pdf.cell(0, 10, " [OK] No critical safety items were endorsed", border="LTR", fill=True, new_x="LMARGIN", new_y="NEXT")
-        pdf.set_font("DejaVu", "", 11)
-        pdf.set_text_color(0, 0, 0)
-        pdf.multi_cell(0, 6, "The three designated critical safety items -- covering past attempts, a clear plan, or thoughts of obtaining means to end one's life -- were all rated \"Never\" by the student.", border="LBR", fill=True, new_x="LMARGIN", new_y="NEXT")
+        pdf.rect(15, pdf.get_y(), 180, 25, 'DF')
         
-    pdf.set_line_width(0.2)
-    pdf.set_draw_color(0, 0, 0)
+        pdf.set_xy(17, pdf.get_y() + 2)
+        pdf.set_font("Arial", "B", 13.5)
+        pdf.set_text_color(*RED_TEXT)
+        pdf.cell(0, 8, "Safety Status", new_x="LMARGIN", new_y="NEXT")
+        
+        pdf.set_xy(17, pdf.get_y())
+        pdf.set_font("Arial", "B", 11)
+        pdf.cell(0, 6, "! CRITICAL SAFETY FLAG DETECTED", new_x="LMARGIN", new_y="NEXT")
+        
+        pdf.set_xy(17, pdf.get_y())
+        pdf.set_font("Arial", "", 11)
+        pdf.set_text_color(0, 0, 0)
+        pdf.multi_cell(176, 5, "Please connect with a counselor immediately. One or more critical safety items were endorsed by the student.", align="L")
+    else:
+        # Reference #eaf7f1 fill, #2e9985 border
+        pdf.set_fill_color(234, 247, 241)
+        pdf.set_draw_color(46, 153, 133)
+        pdf.rect(15, pdf.get_y(), 180, 25, 'DF')
+        
+        pdf.set_xy(17, pdf.get_y() + 2)
+        pdf.set_font("Arial", "B", 13.5)
+        pdf.set_text_color(76, 195, 176) # #4cc3b0
+        pdf.cell(0, 8, "Safety Status", new_x="LMARGIN", new_y="NEXT")
+        
+        pdf.set_xy(17, pdf.get_y())
+        pdf.set_font("Arial", "B", 11)
+        pdf.set_text_color(30, 95, 90) # #1e5f5a
+        
+        # Use ✓ character instead of v
+        # We need to make sure python encodes this correctly
+        pdf.set_font("SegoeSymbol", "", 11)
+        pdf.cell(5, 6, u"✓", new_x="RIGHT", new_y="TOP")
+        pdf.set_font("Arial", "B", 11)
+        pdf.cell(0, 6, " No critical safety items were endorsed", new_x="LMARGIN", new_y="NEXT")
+        
+        pdf.set_xy(17, pdf.get_y())
+        pdf.set_font("Arial", "", 11)
+        pdf.set_text_color(0, 0, 0)
+        pdf.multi_cell(176, 5, "The three designated critical safety items -- covering past attempts, a clear plan, or thoughts of obtaining means to end one's life -- were all rated 'Never' by the student.", align="L")
+
+    pdf.set_y(pdf.get_y() + 10)
+
+    # WHERE TO FOCUS SUPPORT BOX
+    # Fill: #fcefd4 (252, 239, 212) Border: #e8935b (232, 147, 91)
+    
+    y_start = pdf.get_y()
+    pdf.set_fill_color(252, 239, 212)
+    pdf.set_draw_color(232, 147, 91)
+    
+    if len(higher_domains) > 0:
+        pdf.rect(15, y_start, 180, 45 + (len(higher_domains)*15), 'DF')
+        
+        pdf.set_xy(17, y_start + 2)
+        pdf.set_font("Arial", "B", 13.5)
+        pdf.set_text_color(232, 147, 91)
+        pdf.cell(0, 8, "Where to Focus Support", new_x="LMARGIN", new_y="NEXT")
+        
+        pdf.set_xy(17, pdf.get_y())
+        pdf.set_font("Arial", "", 11)
+        pdf.set_text_color(0, 0, 0)
+        pdf.multi_cell(176, 5, f"{len(higher_domains)} domain(s) fall in the Higher Relative range this cycle and are the natural starting points for a supportive check-in.")
+        
+        for d, s in higher_domains:
+            pdf.set_x(17)
+            pdf.set_font("Arial", "B", 11)
+            pdf.set_text_color(181, 101, 29) # #b5651d
+            pdf.cell(0, 8, f"{d} -- {s}/24 (Higher Relative)", new_x="LMARGIN", new_y="NEXT")
+            pdf.set_x(17)
+            pdf.set_font("Arial", "", 11)
+            pdf.set_text_color(0, 0, 0)
+            pdf.multi_cell(176, 5, f"This suggests noticeable pressure around {d.lower()}. A conversation exploring strategies and realistic expectation-setting could offer quick, tangible relief.")
+            pdf.ln(2)
+    else:
+        pdf.rect(15, y_start, 180, 25, 'DF')
+        pdf.set_xy(17, y_start + 2)
+        pdf.set_font("Arial", "B", 13.5)
+        pdf.set_text_color(232, 147, 91)
+        pdf.cell(0, 8, "Where to Focus Support", new_x="LMARGIN", new_y="NEXT")
+        pdf.set_xy(17, pdf.get_y())
+        pdf.set_font("Arial", "", 11)
+        pdf.set_text_color(0, 0, 0)
+        pdf.multi_cell(176, 5, "No domains fall in the Higher Relative range this cycle.")
+
 
     # ---------------- PAGE 5 ----------------
     pdf.add_page()
     pdf.set_y(20)
-    pdf.set_font("DejaVu", "B", 18)
+    pdf.set_font("Arial", "B", 18)
     pdf.set_text_color(*GREEN_TEXT)
     pdf.cell(0, 10, "Domain & Strength Analysis", new_x="LMARGIN", new_y="NEXT")
     
     pdf.ln(5)
-    pdf.set_font("DejaVu", "B", 14)
+    pdf.set_font("Arial", "B", 14)
     pdf.set_text_color(*ORANGE_TEXT)
     pdf.cell(0, 10, "Where to Focus Support", new_x="LMARGIN", new_y="NEXT")
-    pdf.set_font("DejaVu", "", 11)
+    pdf.set_font("Arial", "", 11)
     pdf.set_text_color(0, 0, 0)
     
     if len(higher_domains) > 0:
@@ -423,10 +525,10 @@ def create_v2_report(filepath, student_name, course, year, institute, scores, ba
         
         for d, s in higher_domains:
             # Check page break
-            pdf.set_font("DejaVu", "B", 11)
+            pdf.set_font("Arial", "B", 11)
             pdf.set_text_color(*ORANGE_TEXT)
             pdf.cell(0, 10, f" {d} -- {s}/24 (Higher Relative)", border="LTR", fill=True, new_x="LMARGIN", new_y="NEXT")
-            pdf.set_font("DejaVu", "", 11)
+            pdf.set_font("Arial", "", 11)
             pdf.set_text_color(0, 0, 0)
             pdf.multi_cell(0, 6, f"This suggests noticeable pressure around {d.lower()}. A conversation exploring strategies and realistic expectation-setting could offer quick, tangible relief.", border="LBR", fill=True, new_x="LMARGIN", new_y="NEXT")
             pdf.ln(4)
@@ -438,7 +540,7 @@ def create_v2_report(filepath, student_name, course, year, institute, scores, ba
     
     if len(moderate_domains) > 0:
         pdf.ln(5)
-        pdf.set_font("DejaVu", "B", 14)
+        pdf.set_font("Arial", "B", 14)
         pdf.set_text_color(60, 130, 180)
         pdf.cell(0, 10, "Moderate Relative Domain", new_x="LMARGIN", new_y="NEXT")
         
@@ -446,9 +548,9 @@ def create_v2_report(filepath, student_name, course, year, institute, scores, ba
         pdf.set_draw_color(60, 130, 180)
         pdf.set_line_width(0.5)
         
-        pdf.set_font("DejaVu", "B", 11)
+        pdf.set_font("Arial", "B", 11)
         pdf.cell(0, 10, " Moderate Relative domains", border="LTR", fill=True, new_x="LMARGIN", new_y="NEXT")
-        pdf.set_font("DejaVu", "", 11)
+        pdf.set_font("Arial", "", 11)
         pdf.set_text_color(0, 0, 0)
         
         mod_str = ", ".join([f"{d} ({s}/24)" for d, s in moderate_domains])
@@ -456,7 +558,7 @@ def create_v2_report(filepath, student_name, course, year, institute, scores, ba
         
     if len(strength_domains) > 0:
         pdf.ln(5)
-        pdf.set_font("DejaVu", "B", 14)
+        pdf.set_font("Arial", "B", 14)
         pdf.set_text_color(*GREEN_TEXT)
         pdf.cell(0, 10, "Areas of relative strength", new_x="LMARGIN", new_y="NEXT")
         
@@ -464,7 +566,7 @@ def create_v2_report(filepath, student_name, course, year, institute, scores, ba
         pdf.set_draw_color(*GREEN_TEXT)
         
         str_domains = ", ".join([f"{d} (0/24)" for d in strength_domains])
-        pdf.set_font("DejaVu", "", 11)
+        pdf.set_font("Arial", "", 11)
         pdf.set_text_color(0, 0, 0)
         pdf.multi_cell(0, 6, f"{str_domains} shows no endorsement at all.\nThese are encouraging signs -- the student appears to be maintaining connection and does not report these as a coping strategy.", border=1, fill=True, new_x="LMARGIN", new_y="NEXT")
 
@@ -473,34 +575,34 @@ def create_v2_report(filepath, student_name, course, year, institute, scores, ba
     
     pdf.ln(5)
         
-    pdf.set_font("DejaVu", "B", 14)
+    pdf.set_font("Arial", "B", 14)
     pdf.set_text_color(40, 100, 80)
     pdf.cell(0, 10, "Recommended Support Plan", new_x="LMARGIN", new_y="NEXT")
     
     pdf.set_fill_color(30, 80, 80)
     pdf.set_text_color(255, 255, 255)
-    pdf.set_font("DejaVu", "B", 10)
+    pdf.set_font("Arial", "B", 10)
     pdf.cell(40, 10, "Priority", border=1, fill=True, align="L")
     pdf.cell(150, 10, "Recommended Direction", border=1, fill=True, align="L", new_x="LMARGIN", new_y="NEXT")
     
-    pdf.set_font("DejaVu", "", 10)
+    pdf.set_font("Arial", "", 10)
     
     def draw_support_row(priority, text, color):
-        pdf.set_font("DejaVu", "", 10)
+        pdf.set_font("Arial", "", 10)
         h = pdf.get_multi_cell_height(150, 6, text) + 4
         
         x_before = pdf.get_x()
         y_before = pdf.get_y()
         
         pdf.set_text_color(*color)
-        pdf.set_font("DejaVu", "B", 10)
+        pdf.set_font("Arial", "B", 10)
         pdf.rect(x_before, y_before, 40, h, 'D')
         pdf.set_xy(x_before + 2, y_before + 2)
         pdf.cell(36, 6, priority, align="L")
         
         pdf.set_xy(x_before + 40, y_before)
         pdf.set_text_color(0, 0, 0)
-        pdf.set_font("DejaVu", "", 10)
+        pdf.set_font("Arial", "", 10)
         pdf.rect(x_before + 40, y_before, 150, h, 'D')
         pdf.set_xy(x_before + 42, y_before + 2)
         pdf.multi_cell(146, 6, text, align="L")
@@ -517,92 +619,24 @@ def create_v2_report(filepath, student_name, course, year, institute, scores, ba
     # ---------------- PAGE 6 ----------------
     pdf.add_page()
     render_gentle_everyday_suggestions_page(pdf)
+
+    # Contact Info at bottom of Page 6
+    pdf.set_y(pdf.get_y() + 10)
+    pdf.set_font("Arial", "B", 12)
+    pdf.set_text_color(90, 107, 112)
+    pdf.cell(0, 8, "Recommendations", new_x="LMARGIN", new_y="NEXT")
     
-    # ---------------- DYNAMIC RECOMMENDATIONS ----------------
-
-    if pdf.get_y() > 250:
-        pdf.add_page()
-        
-    pdf.set_font("DejaVu", "B", 14)
-    pdf.set_text_color(45, 62, 72)
-    pdf.cell(0, 10, "Recommendations", new_x="LMARGIN", new_y="NEXT")
-    pdf.ln(2)
-        
-
-    pdf.set_font("DejaVu", "", 10)
-    pdf.set_text_color(0, 0, 0)
-
-    if critical_flag:
-        pdf.set_font("DejaVu", "B", 11)
-        pdf.set_text_color(*RED_TEXT)
-        pdf.cell(0, 8, "Immediate Action Required (Critical Safety Flag)", new_x="LMARGIN", new_y="NEXT")
-        pdf.set_font("DejaVu", "", 10)
-        pdf.set_text_color(0, 0, 0)
-        pdf.multi_cell(0, 6, "A critical safety item was endorsed. It is highly recommended to connect with a counsellor immediately for a safety assessment and appropriate support planning. Do not rely solely on these suggestions.", new_x="LMARGIN", new_y="NEXT")
-        pdf.ln(3)
-
-    domains_to_recommend = []
-    # Add Higher
-    for d, s in higher_domains:
-        domains_to_recommend.append((d, "Higher"))
-    # Add Moderate
-    for d, s in moderate_domains:
-        domains_to_recommend.append((d, "Moderate"))
-
-    if scores[3] > 0 and ('Substance Abuse', 'Higher') not in domains_to_recommend and ('Substance Abuse', 'Moderate') not in domains_to_recommend:
-        domains_to_recommend.append(('Substance Abuse', 'Any reported concern'))
-
-    if not domains_to_recommend:
-        pdf.multi_cell(0, 6, "No specific areas of concern were identified. Continue to utilize healthy coping strategies and reach out if you feel overwhelmed in the future.", new_x="LMARGIN", new_y="NEXT")
-    else:
-        for d, band in domains_to_recommend:
-            if pdf.get_y() > 260:
-                pdf.add_page()
-                
-            if d == 'Substance Abuse':
-                pdf.set_font("DejaVu", "B", 10)
-                pdf.set_text_color(60, 100, 140)
-                pdf.cell(0, 8, f"{d}", new_x="LMARGIN", new_y="NEXT")
-                pdf.set_font("DejaVu", "", 10)
-                pdf.set_text_color(0, 0, 0)
-                rec_text = RECOMMENDATIONS.get(d, {}).get("Any reported concern", "")
-                pdf.multi_cell(0, 6, rec_text, new_x="LMARGIN", new_y="NEXT")
-                pdf.ln(2)
-                continue
-
-            pdf.set_font("DejaVu", "B", 10)
-            pdf.set_text_color(60, 100, 140)
-            pdf.cell(0, 8, f"{d} ({band} Relative)", new_x="LMARGIN", new_y="NEXT")
-            pdf.set_font("DejaVu", "", 10)
-            pdf.set_text_color(0, 0, 0)
-            rec_text = RECOMMENDATIONS.get(d, {}).get(f"{band} Relative", f"Consider seeking support for {d.lower()}.")
-            pdf.multi_cell(0, 6, rec_text, new_x="LMARGIN", new_y="NEXT")
-            pdf.ln(2)
-
-    if strength_domains:
-        if pdf.get_y() > 260:
-            pdf.add_page()
-        pdf.set_font("DejaVu", "B", 10)
-        pdf.set_text_color(*GREEN_TEXT)
-        pdf.cell(0, 8, "Ongoing Strengths", new_x="LMARGIN", new_y="NEXT")
-        pdf.set_font("DejaVu", "", 10)
-        pdf.set_text_color(0, 0, 0)
-        pdf.multi_cell(0, 6, f"The student shows relative strength in: {', '.join(strength_domains)}. Continue to build on these protective factors and utilize them as resources during stressful periods.", new_x="LMARGIN", new_y="NEXT")
-
-    # Footer section on page 6 (if space permits, else page 7, but it belongs on page 6 typically)
-    # The requirement says exactly 7 pages. So we must fit it on page 6.
-    pdf.set_y(270)
-        
-    pdf.set_font("DejaVu", "", 10)
-    pdf.set_text_color(80, 100, 100)
-    pdf.cell(0, 6, "For more information, contact us:", align="C", new_x="LMARGIN", new_y="NEXT")
-    pdf.set_font("DejaVu", "B", 10)
-    pdf.set_text_color(20, 100, 100)
-    pdf.cell(0, 6, "acrocare@acropolis.in  |  9630990027", align="C", new_x="LMARGIN", new_y="NEXT")
-    pdf.set_font("DejaVu", "", 10)
-    pdf.set_text_color(120, 120, 120)
-    pdf.cell(0, 6, "Acropolis Group of Institutions, Indore", align="C", new_x="LMARGIN", new_y="NEXT")
-
+    pdf.set_font("Arial", "I", 9)
+    pdf.cell(0, 5, "For more information, contact us:", new_x="LMARGIN", new_y="NEXT")
+    
+    pdf.set_font("Arial", "B", 9.5)
+    pdf.set_text_color(30, 95, 90)
+    pdf.cell(0, 5, "acrocare@acropolis.in   .   9630990027", new_x="LMARGIN", new_y="NEXT")
+    
+    pdf.set_font("Arial", "", 8)
+    pdf.set_text_color(90, 107, 112)
+    pdf.cell(0, 5, "Acropolis Group of Institutions, Indore", new_x="LMARGIN", new_y="NEXT")
+    
     # ---------------- PAGE 7 ----------------
     if pdf.page_no() < 7:
         pdf.add_page()
@@ -619,17 +653,16 @@ def create_v2_report(filepath, student_name, course, year, institute, scores, ba
         pdf.set_font("times", "I", 20)
         pdf.set_text_color(40, 60, 120)
         pdf.cell(0, 10, "ACROPOLIS", align="C", new_x="LMARGIN", new_y="NEXT")
-        pdf.set_font("DejaVu", "", 16)
+        pdf.set_font("Arial", "", 16)
         pdf.cell(0, 10, "Enlightening Wisdom", align="C", new_x="LMARGIN", new_y="NEXT")
         
     pdf.set_y(170)
-    pdf.set_font("DejaVu", "B", 16)
+    pdf.set_font("Arial", "B", 16)
     pdf.set_text_color(30, 80, 160)
     pdf.cell(0, 10, "Acropolis Group of Institutions", align="C", new_x="LMARGIN", new_y="NEXT")
-    pdf.set_font("DejaVu", "", 11)
+    pdf.set_font("Arial", "", 11)
     pdf.set_text_color(0, 0, 0)
     pdf.cell(0, 8, "Address- Bypass Road, Manglia Square, Manglia, Indore, Madhya Pradesh - 453771", align="C", new_x="LMARGIN", new_y="NEXT")
     pdf.cell(0, 8, "Contact- 0731-4730000, 4730001", align="C", new_x="LMARGIN", new_y="NEXT")
 
     pdf.output(filepath)
-
