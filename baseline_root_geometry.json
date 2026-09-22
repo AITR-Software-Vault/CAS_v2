@@ -1,0 +1,62 @@
+{
+    "button_browse": {
+        "rootx": 44,
+        "rooty": 157,
+        "width": 331,
+        "height": 46
+    },
+    "button_upload": {
+        "rootx": 44,
+        "rooty": 613,
+        "width": 331,
+        "height": 46
+    },
+    "button_generate": {
+        "rootx": 969,
+        "rooty": 162,
+        "width": 143,
+        "height": 26
+    },
+    "button_view": {
+        "rootx": 969,
+        "rooty": 215,
+        "width": 143,
+        "height": 26
+    },
+    "button_delete": {
+        "rootx": 969,
+        "rooty": 260,
+        "width": 143,
+        "height": 26
+    },
+    "button_downall": {
+        "rootx": 969,
+        "rooty": 305,
+        "width": 143,
+        "height": 26
+    },
+    "button_viewsum": {
+        "rootx": 969,
+        "rooty": 355,
+        "width": 143,
+        "height": 26
+    },
+    "button_savecopy": {
+        "rootx": 969,
+        "rooty": 398,
+        "width": 143,
+        "height": 41
+    },
+    "button_clearbox": {
+        "rootx": 1049,
+        "rooty": 69,
+        "width": 63,
+        "height": 26
+    },
+    "button_order": {
+        "rootx": 1083,
+        "rooty": 577,
+        "width": 29,
+        "height": 26
+    }
+}

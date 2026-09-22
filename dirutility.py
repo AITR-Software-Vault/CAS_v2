@@ -58,25 +58,32 @@ def create_raw_folder() -> None:
     os.makedirs(targetdir, exist_ok=True)
 
 
-def upload_to_raw_folder(filepath: str) -> str:
-    # function to return the file extension
+import re
+def upload_to_raw_folder(filepath: str, survey_name: str = "", upload_time = None) -> str:
     targetdir = pathlib.Path(config.RAWFOL)
     sourcefile = pathlib.Path(filepath)
     extension = sourcefile.suffix
-    crypticname = str(uuid.uuid1()) + extension
+    
+    if survey_name and survey_name.strip():
+        base_name = survey_name.strip()
+    else:
+        base_name = sourcefile.stem
+        
+    # Clean up base_name for valid Windows folder/file naming
+    base_name = re.sub(r'[\/*?:"<>|]', "", base_name).strip()
+    
+    if upload_time:
+        if hasattr(upload_time, "isoformat"):
+            time_str = upload_time.isoformat(timespec='seconds')
+        else:
+            time_str = str(upload_time)
+        # Clean ISO time for valid filename (replace colons)
+        time_str = time_str.replace(":", "-").replace(" ", "T")
+        crypticname = f"{base_name}_{time_str}{extension}"
+    else:
+        crypticname = str(uuid.uuid1()) + extension
+        
     destfile = targetdir / crypticname
-    # destination = os.join(targetdir, str(uuid.uuid1()))
-
-    # source = r"E:\demos\files\reports\profit.txt"
-    # destination = r"E:\final\reports\profit.txt"
-    # open source file in read mode
-    # with open(sourcefile, "r") as inp:
-        # open destination path in write mode
-        # with open(destfile, "w") as out:
-            # copy file
-            # shutil.copyfileobj(inp, out)
     shutil.copy2(sourcefile, destfile)
     print("Copied", crypticname, destfile, extension)
-
-
     return crypticname

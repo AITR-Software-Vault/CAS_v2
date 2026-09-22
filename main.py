@@ -162,7 +162,7 @@ def enterTime(event=None):
     pass
 
 
-def Perform_File_Operations(data_sheet: str, survey_id: int, survey_name: str):
+def Perform_File_Operations(data_sheet: str, survey_id: int, survey_name: str, ui_callback=None):
     # FILE = 'cas-copy.xlsx'
     # rootwindow.configure(cursor='wait')
     # rootwindow.config(cursor='watch')
@@ -192,7 +192,7 @@ def Perform_File_Operations(data_sheet: str, survey_id: int, survey_name: str):
     # pprint(studata) 
     # graphs = {'abcd': 'abcd1.png', 'nmn': 'nmn2.png', 'vxz': 'vxz3.png', 'efg': 'efg4.png', 'fgh': 'fgh5.png', 'hui': 'hui6.png', 'tkiof': 'tkiof7.png'}
     
-    graphs = tsc.Plot_Graphs(tscdata, studata, version)
+    graphs = tsc.Plot_Graphs(tscdata, studata, version, ui_callback=ui_callback)
     # print(graphs)
         
     reportsdir = dutil.create_report_folder(data_sheet)
@@ -202,7 +202,7 @@ def Perform_File_Operations(data_sheet: str, survey_id: int, survey_name: str):
     rutil.Create_Summary(reportsdir, tscdata, studata, codednames, 
                         allquestions , rawscores, survey_name, version=version, scoring_results=scoring_results)
     rutil.Create_All_Reports(reportsdir, tscdata, studata, allquestions, graphs, 
-                        survey_id, codednames, version=version, scoring_results=scoring_results)
+                        survey_id, codednames, version='v2', scoring_results=scoring_results, ui_callback=ui_callback)
     # rootwindow.config(cursor='')
     return 1
 
@@ -219,14 +219,20 @@ def center_window(window, width=300, height=200):
 
 
 def Create_Busy_Frame(parentwindow):
-    # bsframe = tk.Tk(parentwindow)
     bsframe = tk.Toplevel(parentwindow)
-    # bsframe.geometry("100x100+350+350")
-    center_window(bsframe, 300, 100)
+    center_window(bsframe, 400, 150)
     bsframe.title("Wait...")
-    label = tk.Label(bsframe, text="Generating reports...", anchor='center')
-    # label.grid(column=0, row=0, sticky=tk.E + tk.W + tk.N + tk.S)
-    label.pack(anchor='center', fill='both', expand=1)
+    
+    lbl_var = tk.StringVar(value="Initializing...")
+    label = ttk.Label(bsframe, textvariable=lbl_var, anchor='center')
+    label.pack(pady=10)
+    
+    progress_var = tk.DoubleVar(value=0)
+    pb = ttk.Progressbar(bsframe, variable=progress_var, maximum=100)
+    pb.pack(fill='x', padx=20, pady=10)
+    
+    bsframe.lbl_var = lbl_var
+    bsframe.progress_var = progress_var
     return bsframe
     pass
 
@@ -271,8 +277,14 @@ def Generate_Action(tree: tk.ttk.Treeview, treeselection: list):
             print(fname)
             print()
             # try:
+            def ui_callback(current, total, msg):
+                busyframe.lbl_var.set(msg)
+                if total > 0:
+                    busyframe.progress_var.set((current / total) * 100)
+                busyframe.update_idletasks()
+            
             print("Success? \t",
-                Perform_File_Operations(fname, item_id, survey_name))
+                Perform_File_Operations(fname, item_id, survey_name, ui_callback=ui_callback))
     except Exception as e:
         # logging.error(traceback.format_exc())
         # log_error(traceback.format_exc())
@@ -389,7 +401,7 @@ def Upload_Action():
 def Upload_Report(data: list):
 
     dutil.create_raw_folder()
-    cryptic_filename = dutil.upload_to_raw_folder(data[-2])
+    cryptic_filename = dutil.upload_to_raw_folder(data[-2], data[0], data[-1])
     data[-2] = cryptic_filename
 
     con1 = con or sqlite3.connect(config.DB)
@@ -596,17 +608,17 @@ def View_Reports():
         BUTTON_WIDTH = 25
         tree_studentsinfo = ttk.Treeview(reportsframe, columns=FIELD_ID,
                                 show='headings', displaycolumns=SHOW_COLS)
-        label_info = tk.Label(reportsframe, text=TIP, justify=tk.LEFT, 
+        label_info = ttk.Label(reportsframe, text=TIP, justify=tk.LEFT, 
                             anchor='w')
-        frame_filefilter = tk.Frame(reportsframe)
-        label_filefilter = tk.Label(frame_filefilter, text="Filter")
-        input_filefilter = tk.Entry(frame_filefilter)
-        button_downselected = tk.Button(reportsframe, anchor='center', 
+        frame_filefilter = ttk.Frame(reportsframe)
+        label_filefilter = ttk.Label(frame_filefilter, text="Filter")
+        input_filefilter = ttk.Entry(frame_filefilter)
+        button_downselected = ttk.Button(reportsframe, style="Secondary.TButton", takefocus=False, 
             text="Download selected reports", width=BUTTON_WIDTH, 
             command=lambda: Download_Selected_Reports(tree_studentsinfo, 
                 reportsdir, reportsframe)
             )
-        button_openselected = tk.Button(reportsframe, anchor='center', 
+        button_openselected = ttk.Button(reportsframe, style="Secondary.TButton", takefocus=False, 
             text="Open selected reports", width=BUTTON_WIDTH, 
             command=lambda: openFile(tree_studentsinfo, item)
             )
@@ -784,28 +796,32 @@ def updateDeptBox(e=None):
 def openinfowindow(parentwindow):
     FALLBACK_INFO = """
 Developed by:
-
+-- Release v2
+* Lakshya Verma\t (IT 2028 Batch)
+For help and assistance email at: 
+lakshyaverma240882@gmail.in
+-- Release V1
 * Ashutosh Dubey\t\t(IMCA 2021 batch)
 * Durva Shinde\t\t(IMCA 2021 batch)
 * Kushagra Mehrotra\t(IMCA 2019 batch) 
-\t\t\t\t
-Student at Acropolis FCA department under guidance of \t\t
-Prof. Nitin Kulkarni.
-
 For help and assistance email at: 
 kushagramehrotra.ca19@acropolis.in
+
+\t\t\t\t
+Student at Acropolis FCA and IT department under guidance of \t\t
+Dr. Nitin Kulkarni.
 """
     infowindow = tk.Toplevel(parentwindow)
     info = FALLBACK_INFO
-    label_contributors = tk.Label(infowindow, text=info, justify='left')
+    label_contributors = ttk.Label(infowindow, text=info, justify='left')
     label_contributors.pack(ipadx=PX)
     
 
 
 def createFooter(parentwindow):
-    INFO_DEPT       = """Made by students at FCA department"""
-    label_madeby    = tk.Label(parentwindow, text=INFO_DEPT)
-    button_info     = tk.Button(parentwindow, text="?", 
+    INFO_DEPT       = """Developed by students at IT  department  V_2.0"""
+    label_madeby    = ttk.Label(parentwindow, text=INFO_DEPT)
+    button_info     = ttk.Button(parentwindow, style="Secondary.TButton", takefocus=False, text="?", 
                         command=lambda: openinfowindow(parentwindow))
 
     button_info.pack(side='right', ipadx=PX)
@@ -877,11 +893,44 @@ if __name__ == '__main__':
 
     # GUI (Tkinter) interface
     rootwindow = tk.Tk()
-    rootwindow.title("Acrocare")
+    rootwindow.title("Acrocare-CMHSI")
     rootwindow.resizable(False, False)
 
+    rootwindow.configure(bg='#F4F7F8')
+    try:
+        from pathutility import icon_path, image_path
+        logo_img = tk.PhotoImage(file=str(image_path('acropolis_logo_transparent.png')))
+        rootwindow.iconphoto(True, logo_img)
+    except Exception as e:
+        print('Icon failed to load:', e)
+
+    style = ttk.Style()
+    if 'clam' in style.theme_names():
+        style.theme_use('clam')
+    
+    style.configure('TFrame', background='#F4F7F8')
+    style.configure('TLabelframe', background='#F4F7F8')
+    style.configure('TLabelframe.Label', background='#F4F7F8', font=('Segoe UI', 10))
+    style.configure('TLabel', background='#F4F7F8', font=('Segoe UI', 10), foreground='#263238')
+    style.configure('TEntry', font=('Segoe UI', 10))
+    style.configure('TCombobox', font=('Segoe UI', 10))
+    
+    style.configure('Primary.TButton', background='#1E5F5A', foreground='white', font=('Segoe UI', 10, 'bold'), )
+    style.map('Primary.TButton', background=[('active', '#2E9985'), ('disabled', '#D8E3E5')])
+    
+    style.configure('Secondary.TButton', background='#FFFFFF', foreground='#1E5F5A', font=('Segoe UI', 10), bordercolor='#D8E3E5')
+    style.map('Secondary.TButton', background=[('active', '#E8F5F2'), ('disabled', '#F4F7F8')])
+    
+    style.configure('Danger.TButton', background='#FFFFFF', foreground='#C0433C', font=('Segoe UI', 10), bordercolor='#C0433C')
+    style.map('Danger.TButton', background=[('active', '#FADBD8'), ('disabled', '#F4F7F8')])
+
+    style.configure('Treeview', font=('Segoe UI', 10), rowheight=25, background='#FFFFFF', fieldbackground='#FFFFFF', foreground='#263238')
+    style.map('Treeview', background=[('selected', '#DCEFEB')], foreground=[('selected', '#1E5F5A')])
+    style.configure('Treeview.Heading', font=('Segoe UI', 10, 'bold'), background='#E8F5F2', foreground='#1E5F5A')
+
+
     # frame_datetime = ttk.LabelFrame(rootwindow, text="Select date of survey*")
-    frame_datetime = tk.Frame(rootwindow, width=FIELD_SIZE)
+    frame_datetime = ttk.Frame(rootwindow, width=FIELD_SIZE)
 
     # institute_values = ('AITR', 'AIMSR', 'AIPER', 'AFMR', 'FCA', 'AIL', 'AID')
     institute_values = college.institutes
@@ -894,39 +943,39 @@ if __name__ == '__main__':
     timevalue   = tk.StringVar()
     timevalue.set('')
 
-    label_filepath  = tk.Label(rootwindow, text="Browse input file*", 
+    label_filepath  = ttk.Label(rootwindow, text="Browse input file*", 
                             anchor='w')
-    label_surveyname= tk.Label(rootwindow, text="Survey name", anchor='w')
-    # label_datetime  = tk.Label(frame_datetime, 
+    label_surveyname= ttk.Label(rootwindow, text="Survey name", anchor='w')
+    # label_datetime  = ttk.Label(frame_datetime, 
     #                    text="Enter date and giventime of survey", anchor='w')
     label_date      = ttk.LabelFrame(frame_datetime, 
                         text="Pick date of survey:*", width=FIELD_SIZE//2)
     label_time      = ttk.LabelFrame(frame_datetime, 
                         text="Time of survey (optional):")
-    label_institute = tk.Label(rootwindow, text="Institute", anchor='w')
-    label_department= tk.Label(rootwindow, text="Department", anchor='w')
+    label_institute = ttk.Label(rootwindow, text="Institute", anchor='w')
+    label_department= ttk.Label(rootwindow, text="Department", anchor='w')
 
-    input_filepath  = tk.Entry(rootwindow, width=FIELD_SIZE)
-    input_surveyname= tk.Entry(rootwindow, width=FIELD_SIZE)
-    # input_datetime  = tk.Entry(frame_datetime, width=FIELD_SIZE)
+    input_filepath  = ttk.Entry(rootwindow, width=FIELD_SIZE)
+    input_surveyname= ttk.Entry(rootwindow, width=FIELD_SIZE)
+    # input_datetime  = ttk.Entry(frame_datetime, width=FIELD_SIZE)
     pick_day        = ttk.Combobox(label_date, values=DATERANGE, 
         state='readonly', width='3')
     pick_month      = ttk.Combobox(label_date, values=MONTHRANGE, 
         state='readonly', width='4')
     pick_year       = ttk.Combobox(label_date, values=YEARRANGE, 
         state='readonly', width='5')
-    input_time      = tk.Entry(label_time, textvariable=timevalue)
+    input_time      = ttk.Entry(label_time, textvariable=timevalue)
     pick_institute  = ttk.Combobox(rootwindow, width=FIELD_SIZE-3,
         text="Institute", values=institute_values, state='readonly')
-    # input_department= tk.Entry(rootwindow, width=FIELD_SIZE)
+    # input_department= ttk.Entry(rootwindow, width=FIELD_SIZE)
     pick_department = ttk.Combobox(rootwindow, width=FIELD_SIZE-3, 
         text="Department", values=department_value, state='readonly')
     
-    button_browse   = tk.Button(rootwindow,
+    button_browse   = ttk.Button(rootwindow, style="Primary.TButton", takefocus=False,
                         text = "Browse",
                         command = Browse_Files)
 
-    button_upload = tk.Button(rootwindow, 
+    button_upload = ttk.Button(rootwindow, style="Primary.TButton", takefocus=False, 
                         text = 'Upload form',
                         command=Upload_Action) 
 
@@ -1015,35 +1064,35 @@ if __name__ == '__main__':
     ogfilename = tk.StringVar()
     ogfilename.set('')
 
-    label_associatedfile = tk.Label(rootwindow, textvariable=ogfilename, 
+    label_associatedfile = ttk.Label(rootwindow, textvariable=ogfilename, 
                                     anchor='w')
-    label_sortby    = tk.Label(rootwindow, text="Sort by:", anchor='w')
+    label_sortby    = ttk.Label(rootwindow, text="Sort by:", anchor='w')
     pick_order      = ttk.Combobox(rootwindow, text="sort_by", 
         values=sort_keys, state='readonly')
-    label_filter    = tk.Label(rootwindow, text="Filter:", anchor='w')
-    input_filter    = tk.Entry(rootwindow, width=17)
+    label_filter    = ttk.Label(rootwindow, text="Filter:", anchor='w')
+    input_filter    = ttk.Entry(rootwindow, width=17)
 
-    button_generate = tk.Button(rootwindow, 
+    button_generate = ttk.Button(rootwindow, style="Primary.TButton", takefocus=False, 
                         text = 'GENERATE REPORTS',  state='disabled',
                         command=Threaded_Generate_Action)
-    button_view     = tk.Button(rootwindow, 
+    button_view     = ttk.Button(rootwindow, style="Secondary.TButton", takefocus=False, 
                         text = 'VIEW REPORTS',      state='disabled',
                         command=View_Reports)
-    button_delete   = tk.Button(rootwindow, 
+    button_delete   = ttk.Button(rootwindow, style="Danger.TButton", takefocus=False, 
                         text = 'DELETE SURVEY',     state='disabled',
                         command=Delete_Reports)
-    button_downall  = tk.Button(rootwindow, 
+    button_downall  = ttk.Button(rootwindow, style="Secondary.TButton", takefocus=False, 
                         text = 'DOWNLOAD REPORTS',  state='disabled',
                         command=Copy_All_Reports)
-    button_viewsum  = tk.Button(rootwindow,
+    button_viewsum  = ttk.Button(rootwindow, style="Secondary.TButton", takefocus=False,
                         text = 'VIEW SUMMARY',      state='disabled',
                         command=Open_Associated_Summary)
-    button_savecopy = tk.Button(rootwindow,
+    button_savecopy = ttk.Button(rootwindow, style="Secondary.TButton", takefocus=False,
                         text = 'SAVE A COPY OF \nSUMMARY', state='disabled',
                         command=Copy_Summary)
-    button_clearbox = tk.Button(rootwindow,
+    button_clearbox = ttk.Button(rootwindow, style="Secondary.TButton", takefocus=False,
                         text = 'clear filter', command=Clear_Filter)
-    button_order    = tk.Button(rootwindow,
+    button_order    = ttk.Button(rootwindow, style="Secondary.TButton", takefocus=False,
                         text = f"{'^' if order else 'v'}", 
                         command=Change_Sort_Order)
 
@@ -1072,7 +1121,7 @@ if __name__ == '__main__':
                 ).grid(column=0, row=998, columns=999, sticky=tk.E+tk.W)
 
 
-    frame_footer = tk.Frame(rootwindow)
+    frame_footer = ttk.Frame(rootwindow)
     frame_footer.grid(row=999, column=0, columns=999, sticky=tk.E+tk.W)
     # binfo, lmadeby = createFooter(frame_footer)
     createFooter(frame_footer)

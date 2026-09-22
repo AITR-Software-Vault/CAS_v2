@@ -1,3 +1,4 @@
+from tqdm import tqdm
 import config
 import departmentdata as college
 import recommendations as reco
@@ -276,7 +277,7 @@ def plot_problem_areas(pdfobj, col: list,
 
 def Create_All_Reports(dirpath: str, tscoreslist: list, data: list, allquestions: list,
                         graphs: dict, survey_id: int, codenames: list = None,
-                        whichdepartment: str = None, version: str = 'v1', scoring_results: list = None) -> str:
+                        whichdepartment: str = None, version: str = 'v2', scoring_results: list = None, ui_callback=None) -> str:
 
     con1 = sqlite3.connect(config.DB)
     cur = con1.cursor()
@@ -294,7 +295,12 @@ def Create_All_Reports(dirpath: str, tscoreslist: list, data: list, allquestions
         (str(survey_id), ))
 
     created_codenames = set()
-    for gi, stu in enumerate(graphs, start=1):
+    for gi, stu in enumerate(tqdm(graphs, desc="Generating PDFs", unit="pdf"), start=1):
+        if ui_callback:
+            try:
+                ui_callback(gi, len(graphs), f"Generating PDF {gi} of {len(graphs)}")
+            except:
+                pass
         count = 1
         codename = ''
         if (codenames is None):
@@ -311,8 +317,9 @@ def Create_All_Reports(dirpath: str, tscoreslist: list, data: list, allquestions
         else:
             outfile_name = f"{codename}.pdf"
         outfile_name = os.path.join(dirpath, outfile_name)
-
+        version= 'v2'
         if version == 'v2':
+            print("called v2")
             if scoring_results is None:
                 raise ValueError("scoring_results must be provided for v2")
             
@@ -347,9 +354,10 @@ def Create_All_Reports(dirpath: str, tscoreslist: list, data: list, allquestions
                 year = data[gi][9] if len(data[gi]) > 9 else 'Unknown'
                 
             import reportutility_v2 as rutil_v2
-            rutil_v2.create_v2_report(os.path.join(dirpath,outfile_name), student_name, course, year, institute, scores, bands, critical_flag)
+            graph_filename = graphs.get(student_name)
+            graph_path = os.path.join(config.TEMPDIR, graph_filename) if graph_filename else None
+            rutil_v2.create_v2_report(os.path.join(dirpath,outfile_name), student_name, course, year, institute, scores, bands, critical_flag, graph_path)
             
-            con1.commit()
         # SURVEY_ID, STU_NAME, EMAIL, GUARDIAN, AGE, GENDER, MOBILE, INSTITUTE, STREAM, YEAR, MONTHLY_FAMILY_INCOME, FILE, CODENAME
         if version == 'v2':
             if len(data[gi]) == 5:
@@ -366,7 +374,7 @@ def Create_All_Reports(dirpath: str, tscoreslist: list, data: list, allquestions
             institute, stream, year, monthly_family_income, tot_problem_areas,
             problem_areas, report_file, version) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
             (survey_id, codename, *db_data, len(problemareas),', '.join(problemareas), outfile_name, version))
-        con1.commit()
+    con1.commit()
     con1.close()
     clean_up(__GRAPHS_DIR)
 

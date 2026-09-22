@@ -22,57 +22,61 @@ def hex_to_rgb(hex_code):
 
 RECOMMENDATIONS = {
     'Anxiety': {
-        'Lower Relative': 'Continue healthy routines, adequate sleep, relaxation practices, and supportive social connections. Encourage awareness of situations that contribute to worry.',
-        'Mild Relative': 'Encourage slow breathing, grounding exercises, structured routines, and identification of worry triggers. Psychoeducation and optional counselling may be offered if concerns persist.',
-        'Moderate Relative': 'Recommend a counsellor discussion to explore the nature, frequency, and impact of anxiety. Encourage coping strategies, relaxation practice, sleep regulation, and monitoring of symptoms.',
-        'Higher Relative': 'Recommend timely professional review to understand the intensity and functional impact of anxiety. Develop an individualized support plan addressing coping skills, sleep, daily functioning, and stressors.'
+        'Lower Relative': 'Maintaining healthy routines, adequate sleep, relaxation practices, and supportive social connections is recommended. Awareness of situations that contribute to worry may also be helpful',
+        'Mild Relative': 'Slow breathing, grounding exercises, structured routines, and identifying worry triggers are recommended. Psychoeducation and counselling support may also be considered if concerns persist',
+        'Moderate Relative': 'Counselling support is recommended to explore the nature, frequency, and impact of anxiety. Coping strategies, relaxation practices, sleep regulation, and monitoring of symptoms are also recommended',
+        'Higher Relative': 'Timely professional review is recommended to understand the intensity and functional impact of anxiety. An individualized support plan addressing coping skills, sleep, daily functioning, and stressors is recommended'
     },
     'Depression': {
-        'Lower Relative': 'Encourage meaningful activities, healthy routines, supportive relationships, and regular self-care.',
-        'Mild Relative': 'Encourage daily routines, appropriate physical activity, positive social engagement, enjoyable activities, and awareness of mood changes. Offer psychoeducation and optional counselling.',
-        'Moderate Relative': 'Recommend a counsellor discussion to explore mood, energy, concentration, interest in activities, and impact on daily functioning. Encourage structured activity planning and social support.',
-        'Higher Relative': 'Recommend timely professional assessment and individualized support to explore persistent mood-related concerns and functional impact. Offer counselling or referral based on professional review.'
+        'Lower Relative': 'Meaningful activities, healthy routines, supportive relationships, and regular self-care are recommended.',
+        'Mild Relative': 'Daily routines, appropriate physical activity, positive social engagement, enjoyable activities, and awareness of mood changes are recommended. Psychoeducation and counselling support may also be considered.',
+        'Moderate Relative': 'Counselling support is recommended to explore mood, energy, concentration, interest in activities, and their impact on daily functioning. Structured activity planning and social support are also recommended.',
+        'Higher Relative': 'Timely professional assessment and individualized support are recommended to explore persistent mood-related concerns and their impact on daily functioning. Counselling or referral may be considered based on professional review.'
     },
     'Suicidal Ideation': {
-        'Lower Relative': 'Encourage emotional support, healthy coping strategies, and awareness of available campus counselling resources. Maintain well-being check-ins where appropriate.',
-        'Mild Relative': 'Recommend a supportive counsellor conversation to understand the context of reported thoughts, emotional distress, and available support resources. Encourage help-seeking and monitoring.',
-        'Moderate Relative': 'Recommend prompt professional review to explore the nature, frequency, context, and impact of suicidal thoughts. Assess safety and support needs directly.',
-        'Higher Relative': 'Recommend urgent professional safety assessment and immediate follow-up. The appropriate response should be determined through direct assessment and institutional protocol.'
+        'Lower Relative': 'Emotional support, healthy coping strategies, and awareness of available campus counselling resources are recommended. Well-being check-ins may also be helpful where appropriate.',
+
+        'Mild Relative': ' A supportive counselling conversation is recommended to understand the context of reported thoughts, emotional distress, and available support resources. Help-seeking and monitoring are also recommended.',
+
+        'Moderate Relative': 'Prompt professional review is recommended to explore the nature, frequency, context, and impact of suicidal thoughts. Safety and support needs should be assessed directly.',
+
+        'Higher Relative': 'Urgent professional safety assessment and immediate follow-up are required. The appropriate response should be determined through direct assessment and institutional protocol.'
     },
     'Substance Abuse': {
-        'Any reported concern': 'Encourage a confidential, non-judgmental counsellor discussion to understand the nature, frequency, context, and functional impact of substance use. Provide psychoeducation on healthier coping strategies.',
-        'Use affects functioning': 'Recommend professional review and individualized support to explore patterns, triggers, consequences, and available referral options.',
-        'Student wants to reduce/stop': 'Offer supportive guidance, motivational conversations, and referral to an appropriate qualified professional or de-addiction service where indicated.'
+        'Lower Relative': 'A confidential, non-judgmental counselling discussion is recommended to understand the nature, frequency, context, and functional impact of substance use. Psychoeducation on healthier coping strategies is also recommended.',
+        'Mild Relative': 'Professional review and individualized support are recommended to explore patterns, triggers, consequences, and available referral options',
+        'Moderate Relative':'Professional review and individualized support are recommended to explore patterns, triggers, consequences, and available referral options',
+        'Higher Relative': 'Supportive guidance, motivational conversations, and referral to an appropriate qualified professional or de-addiction service are recommended where indicated'
     },
     'Self-Esteem Problems': {
-        'Lower Relative': 'Encourage self-awareness, recognition of strengths, healthy self-talk, and meaningful activities.',
-        'Mild Relative': 'Encourage identifying strengths, challenging negative self-judgments, setting realistic goals, and accepting constructive feedback.',
-        'Moderate Relative': 'Recommend counselling support to explore negative self-perceptions, self-comparison, confidence concerns, and their impact on functioning.',
-        'Higher Relative': 'Recommend individualized professional support to explore persistent self-worth concerns and negative self-beliefs. Encourage gradual strength-building and supportive goal-setting.'
+        'Lower Relative': 'Self-awareness, recognition of strengths, healthy self-talk, and meaningful activities are recommended.',
+        'Mild Relative': 'Identifying strengths, challenging negative self-judgments, setting realistic goals, and accepting constructive feedback are recommended.',
+        'Moderate Relative': 'Counselling support is recommended to explore negative self-perceptions, self-comparison, confidence concerns, and their impact on functioning.',
+        'Higher Relative': 'Individualized professional support is recommended to explore persistent self-worth concerns and negative self-beliefs. Gradual strength-building and supportive goal-setting are also recommended.'
     },
     'Interpersonal Problems': {
-        'Lower Relative': 'Encourage healthy relationships, open communication, mutual respect, and positive social activities.',
-        'Mild Relative': 'Encourage active listening, assertive communication, boundary-setting, and seeking supportive connections.',
-        'Moderate Relative': 'Recommend a counsellor discussion to explore relationship difficulties, loneliness, trust concerns, communication patterns, and their impact on well-being.',
-        'Higher Relative': 'Recommend individualized counselling support for persistent interpersonal concerns, social isolation, trust difficulties, or relationship-related distress.'
+        'Lower Relative': 'Healthy relationships, open communication, mutual respect, and positive social activities are recommended.',
+        'Mild Relative': 'Active listening, assertive communication, boundary-setting, and seeking supportive connections are recommended.',
+        'Moderate Relative': 'Counselling support is recommended to explore relationship difficulties, loneliness, trust concerns, communication patterns, and their impact on well-being.',
+        'Higher Relative': 'Individualized counselling support is recommended for persistent interpersonal concerns, social isolation, trust difficulties, or relationship-related distress.'
     },
     'Family Problems': {
-        'Lower Relative': 'Encourage open family communication, mutual understanding, supportive relationships, and healthy personal boundaries.',
-        'Mild Relative': 'Encourage constructive communication, identifying manageable sources of family stress, and seeking support from trusted individuals.',
-        'Moderate Relative': 'Recommend a counsellor discussion to explore family stress, expectations, communication difficulties, and their impact on emotional well-being.',
-        'Higher Relative': 'Recommend individualized professional support to understand persistent family-related distress and identify safe, practical coping and support options. Consider family involvement only when appropriate.'
+        'Lower Relative': 'Open family communication, mutual understanding, supportive relationships, and healthy personal boundaries are recommended',
+        'Mild Relative': 'Constructive communication, identifying manageable sources of family stress, and seeking support from trusted individuals are recommended.',
+        'Moderate Relative': 'Counselling support is recommended to explore family stress, expectations, communication difficulties, and their impact on emotional well-being.',
+        'Higher Relative': 'Individualized professional support is recommended to understand persistent family-related distress and identify safe, practical coping and support options. Family involvement may be considered when appropriate.'
     },
     'Academic Stress': {
-        'Lower Relative': 'Encourage effective study routines, realistic academic goals, balanced schedules, and healthy breaks.',
-        'Mild Relative': 'Encourage time management, prioritization, planned study sessions, short breaks, and academic clarification or support when required.',
-        'Moderate Relative': 'Recommend a counsellor discussion to explore workload, expectations, performance concerns, and time-management difficulties. Encourage a structured academic action plan.',
-        'Higher Relative': 'Recommend timely professional and academic support to understand the impact of academic stress. Develop an individualized plan addressing workload, prioritization, expectations, and institutional resources.'
+        'Lower Relative': 'Effective study routines, realistic academic goals, balanced schedules, and healthy breaks are recommended.',
+        'Mild Relative': 'Time management, prioritization, planned study sessions, short breaks, and academic clarification or support are recommended when required.',
+        'Moderate Relative': 'Counselling support is recommended to explore workload, expectations, performance concerns, and time-management difficulties. A structured academic action plan is also recommended',
+        'Higher Relative': 'Timely professional and academic support are recommended to understand the impact of academic stress. An individualized plan addressing workload, prioritization, expectations, and institutional resources is recommended.'
     },
     'Career Concerns': {
-        'Lower Relative': 'Encourage career exploration, awareness of interests and strengths, and gradual planning for future goals.',
-        'Mild Relative': 'Encourage exploring interests, gathering reliable information, identifying strengths, and discussing options with a career counsellor, mentor, or faculty member.',
-        'Moderate Relative': 'Recommend structured career guidance to explore uncertainty, decision-making difficulties, interests, abilities, and realistic options. Break decisions into manageable steps.',
-        'Higher Relative': 'Recommend timely individualized career counselling to explore persistent career-related distress, decision pressure, uncertainty, and impact on functioning. Develop a structured career-planning support plan.'
+        'Lower Relative': 'Career exploration, awareness of interests and strengths, and gradual planning for future goals are recommended.',
+        'Mild Relative': 'Exploring interests, gathering reliable information, identifying strengths, and discussing options with a career counsellor, mentor, or faculty member are recommended.',
+        'Moderate Relative': 'Structured career guidance is recommended to explore uncertainty, decision-making difficulties, interests, abilities, and realistic options. Breaking decisions into manageable steps is also recommended',
+        'Higher Relative': 'Timely individualized career counselling is recommended to explore persistent career-related distress, decision pressure, uncertainty, and impact on functioning. A structured career-planning support plan is also recommended.'
     }
 }
 
@@ -80,6 +84,7 @@ class V2ReportPDF(FPDF):
     def __init__(self):
         super().__init__()
         self.set_font("helvetica", size=12)
+        self.set_margins(15, 10, 15)
         
     def get_multi_cell_height(self, w, h, txt, align='L'):
         lines = self.multi_cell(w, h, txt, align=align, dry_run=True, output="LINES")
@@ -153,7 +158,7 @@ def render_gentle_everyday_suggestions_page(pdf):
     pdf.set_y(y_start + 10) # 10 padding after grid
 
 
-def create_v2_report(filepath, student_name, course, year, institute, scores, bands, critical_flag):
+def create_v2_report(filepath, student_name, course, year, institute, scores, bands, critical_flag, graph_path=None):
     validate_required_assets()
 
     pdf = V2ReportPDF()
@@ -221,7 +226,8 @@ def create_v2_report(filepath, student_name, course, year, institute, scores, ba
     pdf.set_y(60)
     pdf.set_font("Arial", "B", 18)
     pdf.set_text_color(*GREEN_TEXT)
-    pdf.cell(0, 10, f"Hello {student_name},", new_x="LMARGIN", new_y="NEXT")
+    #student_name.split()[0]
+    pdf.cell(0, 10, f"Hello {student_name.split()[0]},", new_x="LMARGIN", new_y="NEXT")
     pdf.ln(10)
     
     pdf.set_font("Arial", "B", 12)
@@ -339,7 +345,7 @@ def create_v2_report(filepath, student_name, course, year, institute, scores, ba
     def draw_thick_red_border(y_pos):
         # Save state
         
-        pdf.set_draw_color(192, 67, 60) # #c0433c Red border
+        pdf.set_draw_color(225, 137, 85) # Orange border
         pdf.set_line_width(0.8)
         pdf.rect(start_x, y_pos, 180, 8, 'D')
         # Restore
@@ -360,31 +366,31 @@ def create_v2_report(filepath, student_name, course, year, institute, scores, ba
             pdf.cell(80, 8, f" {d}", border=1, fill=True)
             pdf.set_font("Arial", "B", 10)
             pdf.cell(40, 8, f"{score} / 24", border=1, fill=True, align="C")
-            pdf.set_text_color(*GREEN_TEXT)
+            pdf.set_text_color(39, 174, 96)
             pdf.cell(60, 8, "Lower Relative", border=1, fill=True, align="C", new_x="LMARGIN", new_y="NEXT")
             strength_domains.append(d)
             continue
 
         if band == 'Higher Relative':
             higher_domains.append((d, score))
-            pdf.set_fill_color(249, 230, 230) # #f9e6e6 Light red fill
-            pdf.set_text_color(192, 67, 60) # Red text
+            pdf.set_fill_color(252, 239, 212) # #f9e6e6 Light red fill
+            pdf.set_text_color(225, 137, 85) # Red text
             band_text = "Higher Relative"
             is_higher = True
         elif band == 'Moderate Relative':
             moderate_domains.append((d, score))
             pdf.set_fill_color(255, 255, 255)
-            pdf.set_text_color(*ORANGE_TEXT)
+            pdf.set_text_color(142, 68, 173)
             band_text = "Moderate Relative"
         elif band == 'Mild Relative':
             pdf.set_fill_color(255, 255, 255)
-            pdf.set_text_color(*GREEN_TEXT)
+            pdf.set_text_color(41, 128, 185)
             band_text = "Mild Relative"
         else:
             if score == 0:
                 strength_domains.append(d)
             pdf.set_fill_color(255, 255, 255)
-            pdf.set_text_color(*GREEN_TEXT)
+            pdf.set_text_color(39, 174, 96)
             band_text = "Lower Relative"
 
         if is_higher:
@@ -395,7 +401,7 @@ def create_v2_report(filepath, student_name, course, year, institute, scores, ba
             pdf.set_font("Arial", "B", 10)
             pdf.cell(75, 8, f" {d}", border="RBT", fill=True)
             pdf.cell(40, 8, f"{score} / 24", border=1, fill=True, align="C")
-            pdf.set_text_color(192, 67, 60)
+            pdf.set_text_color(225, 137, 85)
             pdf.cell(60, 8, band_text, border=1, fill=True, align="C")
             draw_thick_red_border(y_pos)
             pdf.ln(8)
@@ -406,215 +412,210 @@ def create_v2_report(filepath, student_name, course, year, institute, scores, ba
             pdf.set_font("Arial", "B", 10)
             pdf.cell(40, 8, f"{score} / 24", border=1, fill=True, align="C")
             
-            pdf.set_text_color(*ORANGE_TEXT if band == 'Moderate Relative' else GREEN_TEXT)
+            if band == 'Moderate Relative':
+                pdf.set_text_color(142, 68, 173)
+            elif band == 'Mild Relative':
+                pdf.set_text_color(41, 128, 185)
+            else:
+                pdf.set_text_color(39, 174, 96)
             pdf.cell(60, 8, band_text, border=1, fill=True, align="C", new_x="LMARGIN", new_y="NEXT")
 
     pdf.ln(8)
     pdf.set_line_width(0.3)
 
+    import os
+    if graph_path and os.path.exists(graph_path):
+        # Image w=170, h is auto-calculated but roughly 106.
+        # We might need to check if it fits, but on A4 it should fit with table and safety box.
+        y_before_graph = pdf.get_y()
+        pdf.image(graph_path, x=20, w=170)
+        # get_y() does not auto-update when using pdf.image directly unless it's in a flow, wait, FPDF pdf.image DOES NOT UPDATE get_y().
+        # We must manually set_y after image.
+        pdf.set_y(y_before_graph + 110)
+
     # SAFETY STATUS BOX
-    if critical_flag:
-        pdf.set_fill_color(255, 230, 230)
-        pdf.set_draw_color(*RED_TEXT)
-        pdf.rect(15, pdf.get_y(), 180, 25, 'DF')
+    # if critical_flag:
+    #     pdf.set_fill_color(255, 230, 230)
+    #     pdf.set_draw_color(*RED_TEXT)
+    #     pdf.rect(15, pdf.get_y(), 180, 32, 'DF')
         
-        pdf.set_xy(17, pdf.get_y() + 2)
-        pdf.set_font("Arial", "B", 13.5)
-        pdf.set_text_color(*RED_TEXT)
-        pdf.cell(0, 8, "Safety Status", new_x="LMARGIN", new_y="NEXT")
+    #     pdf.set_xy(17, pdf.get_y() + 2)
+    #     pdf.set_font("Arial", "B", 13.5)
+    #     pdf.set_text_color(*RED_TEXT)
+    #     pdf.cell(0, 8, "Safety Status", new_x="LMARGIN", new_y="NEXT")
         
-        pdf.set_xy(17, pdf.get_y())
-        pdf.set_font("Arial", "B", 11)
-        pdf.cell(0, 6, "! CRITICAL SAFETY FLAG DETECTED", new_x="LMARGIN", new_y="NEXT")
+    #     pdf.set_xy(17, pdf.get_y())
+    #     pdf.set_font("Arial", "B", 11)
+    #     pdf.cell(0, 6, "! CRITICAL SAFETY FLAG DETECTED", new_x="LMARGIN", new_y="NEXT")
         
-        pdf.set_xy(17, pdf.get_y())
-        pdf.set_font("Arial", "", 11)
-        pdf.set_text_color(0, 0, 0)
-        pdf.multi_cell(176, 5, "Please connect with a counselor immediately. One or more critical safety items were endorsed by the student.", align="L")
-    else:
-        # Reference #eaf7f1 fill, #2e9985 border
-        pdf.set_fill_color(234, 247, 241)
-        pdf.set_draw_color(46, 153, 133)
-        pdf.rect(15, pdf.get_y(), 180, 25, 'DF')
+    #     pdf.set_xy(17, pdf.get_y())
+    #     pdf.set_font("Arial", "", 11)
+    #     pdf.set_text_color(0, 0, 0)
+    #     pdf.multi_cell(176, 5, "Please connect with a counselor immediately. One or more critical safety items were endorsed by the student.", align="L")
+    # else:
+    #     # Reference #eaf7f1 fill, #2e9985 border
+    #     pdf.set_fill_color(234, 247, 241)
+    #     pdf.set_draw_color(46, 153, 133)
+    #     pdf.rect(15, pdf.get_y(), 180, 32, 'DF')
         
-        pdf.set_xy(17, pdf.get_y() + 2)
-        pdf.set_font("Arial", "B", 13.5)
-        pdf.set_text_color(76, 195, 176) # #4cc3b0
-        pdf.cell(0, 8, "Safety Status", new_x="LMARGIN", new_y="NEXT")
+    #     pdf.set_xy(17, pdf.get_y() + 2)
+    #     pdf.set_font("Arial", "B", 13.5)
+    #     pdf.set_text_color(76, 195, 176) # #4cc3b0
+    #     pdf.cell(0, 8, "Safety Status", new_x="LMARGIN", new_y="NEXT")
         
-        pdf.set_xy(17, pdf.get_y())
-        pdf.set_font("Arial", "B", 11)
-        pdf.set_text_color(30, 95, 90) # #1e5f5a
+    #     pdf.set_xy(17, pdf.get_y())
+    #     pdf.set_font("Arial", "B", 11)
+    #     pdf.set_text_color(30, 95, 90) # #1e5f5a
         
-        # Use ✓ character instead of v
-        # We need to make sure python encodes this correctly
-        pdf.set_font("SegoeSymbol", "", 11)
-        pdf.cell(5, 6, u"✓", new_x="RIGHT", new_y="TOP")
-        pdf.set_font("Arial", "B", 11)
-        pdf.cell(0, 6, " No critical safety items were endorsed", new_x="LMARGIN", new_y="NEXT")
+    #     # Use ✓ character instead of v
+    #     # We need to make sure python encodes this correctly
+    #     pdf.set_font("SegoeSymbol", "", 11)
+    #     pdf.cell(5, 6, u"✓", new_x="RIGHT", new_y="TOP")
+    #     pdf.set_font("Arial", "B", 11)
+    #     pdf.cell(0, 6, " No critical safety items were endorsed", new_x="LMARGIN", new_y="NEXT")
         
-        pdf.set_xy(17, pdf.get_y())
-        pdf.set_font("Arial", "", 11)
-        pdf.set_text_color(0, 0, 0)
-        pdf.multi_cell(176, 5, "The three designated critical safety items -- covering past attempts, a clear plan, or thoughts of obtaining means to end one's life -- were all rated 'Never' by the student.", align="L")
+    #     pdf.set_xy(17, pdf.get_y())
+    #     pdf.set_font("Arial", "", 11)
+    #     pdf.set_text_color(0, 0, 0)
+    #     pdf.multi_cell(176, 5, "The three designated critical safety items -- covering past attempts, a clear plan, or thoughts of obtaining means to end one's life -- were all rated 'Never' by the student.", align="L")
 
     pdf.set_y(pdf.get_y() + 10)
 
-    # WHERE TO FOCUS SUPPORT BOX
-    # Fill: #fcefd4 (252, 239, 212) Border: #e8935b (232, 147, 91)
-    
-    y_start = pdf.get_y()
-    pdf.set_fill_color(252, 239, 212)
-    pdf.set_draw_color(232, 147, 91)
-    
-    if len(higher_domains) > 0:
-        pdf.rect(15, y_start, 180, 45 + (len(higher_domains)*15), 'DF')
-        
-        pdf.set_xy(17, y_start + 2)
-        pdf.set_font("Arial", "B", 13.5)
-        pdf.set_text_color(232, 147, 91)
-        pdf.cell(0, 8, "Where to Focus Support", new_x="LMARGIN", new_y="NEXT")
-        
-        pdf.set_xy(17, pdf.get_y())
-        pdf.set_font("Arial", "", 11)
-        pdf.set_text_color(0, 0, 0)
-        pdf.multi_cell(176, 5, f"{len(higher_domains)} domain(s) fall in the Higher Relative range this cycle and are the natural starting points for a supportive check-in.")
-        
-        for d, s in higher_domains:
-            pdf.set_x(17)
-            pdf.set_font("Arial", "B", 11)
-            pdf.set_text_color(181, 101, 29) # #b5651d
-            pdf.cell(0, 8, f"{d} -- {s}/24 (Higher Relative)", new_x="LMARGIN", new_y="NEXT")
-            pdf.set_x(17)
-            pdf.set_font("Arial", "", 11)
-            pdf.set_text_color(0, 0, 0)
-            pdf.multi_cell(176, 5, f"This suggests noticeable pressure around {d.lower()}. A conversation exploring strategies and realistic expectation-setting could offer quick, tangible relief.")
-            pdf.ln(2)
-    else:
-        pdf.rect(15, y_start, 180, 25, 'DF')
-        pdf.set_xy(17, y_start + 2)
-        pdf.set_font("Arial", "B", 13.5)
-        pdf.set_text_color(232, 147, 91)
-        pdf.cell(0, 8, "Where to Focus Support", new_x="LMARGIN", new_y="NEXT")
-        pdf.set_xy(17, pdf.get_y())
-        pdf.set_font("Arial", "", 11)
-        pdf.set_text_color(0, 0, 0)
-        pdf.multi_cell(176, 5, "No domains fall in the Higher Relative range this cycle.")
-
-
-    # ---------------- PAGE 5 ----------------
+        # ---------------- PAGE 5 ----------------
     pdf.add_page()
     pdf.set_y(20)
-    pdf.set_font("Arial", "B", 18)
-    pdf.set_text_color(*GREEN_TEXT)
-    pdf.cell(0, 10, "Domain & Strength Analysis", new_x="LMARGIN", new_y="NEXT")
-    
-    pdf.ln(5)
-    pdf.set_font("Arial", "B", 14)
-    pdf.set_text_color(*ORANGE_TEXT)
-    pdf.cell(0, 10, "Where to Focus Support", new_x="LMARGIN", new_y="NEXT")
+
+    # 1. Where to Focus Support
+    pdf.set_font("Arial", "B", 13.5)
+    pdf.set_text_color(225, 137, 85)  # Title orange
+    pdf.cell(0, 8, "Where to Focus Support", new_x="LMARGIN", new_y="NEXT")
+
     pdf.set_font("Arial", "", 11)
     pdf.set_text_color(0, 0, 0)
     
     if len(higher_domains) > 0:
-        pdf.multi_cell(0, 6, f"{len(higher_domains)} domain(s) fall in the Higher Relative range this cycle and are the natural starting points for a supportive check-in.", new_x="LMARGIN", new_y="NEXT")
-        pdf.ln(5)
-        pdf.set_fill_color(255, 240, 230)
-        pdf.set_draw_color(*ORANGE_TEXT)
-        pdf.set_line_width(0.5)
+        num_str = "Two" if len(higher_domains) == 2 else ("One" if len(higher_domains) == 1 else str(len(higher_domains)))
+        domain_plural = "domains fall" if len(higher_domains) > 1 else "domain falls"
+        pdf.multi_cell(180, 5, f"{num_str} {domain_plural} in the Higher Relative range this cycle and are the natural starting points for a supportive check-in.")
+        pdf.ln(4)
+        
+        first_name = student_name.split()[0] if student_name else "the student"
+        FOCUS_SUPPORT_TEXTS = {
+            "Academic Stress": "This suggests noticeable pressure around workload, deadlines, and matching effort to results, common and very manageable first-year experiences\n\nA conversation exploring study planning, time-management strategies, and realistic expectation-setting could offer quick, tangible relief.",
+            "Family Problems": f"There is some indication of tension, high expectations, or communication gaps at home that {first_name} is carrying alongside academic life.\n\nGently exploring the support system and current home context is a good next step."
+        }
         
         for d, s in higher_domains:
-            # Check page break
+            desc = FOCUS_SUPPORT_TEXTS.get(d, f"This suggests noticeable pressure around {d.lower()}. A conversation exploring strategies and realistic expectation-setting could offer quick, tangible relief.")
+            
+            pdf.set_font("Arial", "", 11)
+            h = pdf.get_multi_cell_height(176, 5, desc) + 14
+
+            y_box = pdf.get_y()
+            pdf.set_fill_color(252, 239, 212) # #fcefd4
+            pdf.set_draw_color(232, 147, 91)  # #e8935b
+            pdf.set_line_width(0.4)
+            pdf.rect(15, y_box, 180, h, "DF")
+
+            pdf.set_xy(17, y_box + 2)
             pdf.set_font("Arial", "B", 11)
-            pdf.set_text_color(*ORANGE_TEXT)
-            pdf.cell(0, 10, f" {d} -- {s}/24 (Higher Relative)", border="LTR", fill=True, new_x="LMARGIN", new_y="NEXT")
+            pdf.set_text_color(225, 137, 85)
+            # Use ascii hyphen to avoid cp1252 issues, space it to look like em-dash
+            pdf.cell(0, 7, f"{d} - {s}/24 (Higher Relative)", new_x="LMARGIN", new_y="NEXT")
+
+            pdf.set_xy(17, pdf.get_y() + 1)
             pdf.set_font("Arial", "", 11)
             pdf.set_text_color(0, 0, 0)
-            pdf.multi_cell(0, 6, f"This suggests noticeable pressure around {d.lower()}. A conversation exploring strategies and realistic expectation-setting could offer quick, tangible relief.", border="LBR", fill=True, new_x="LMARGIN", new_y="NEXT")
-            pdf.ln(4)
+            pdf.multi_cell(176, 5, desc)
+            pdf.set_y(y_box + h + 6)
+            
     else:
-        pdf.multi_cell(0, 6, "No domains fall in the Higher Relative range this cycle.", new_x="LMARGIN", new_y="NEXT")
+        pdf.multi_cell(180, 5, "No domains fall in the Higher Relative range this cycle.")
+        pdf.ln(8)
 
-    pdf.set_line_width(0.2)
-    pdf.set_draw_color(0, 0, 0)
-    
-    if len(moderate_domains) > 0:
-        pdf.ln(5)
-        pdf.set_font("Arial", "B", 14)
-        pdf.set_text_color(60, 130, 180)
-        pdf.cell(0, 10, "Moderate Relative Domain", new_x="LMARGIN", new_y="NEXT")
-        
-        pdf.set_fill_color(240, 248, 255)
-        pdf.set_draw_color(60, 130, 180)
-        pdf.set_line_width(0.5)
-        
-        pdf.set_font("Arial", "B", 11)
-        pdf.cell(0, 10, " Moderate Relative domains", border="LTR", fill=True, new_x="LMARGIN", new_y="NEXT")
-        pdf.set_font("Arial", "", 11)
-        pdf.set_text_color(0, 0, 0)
-        
-        mod_str = ", ".join([f"{d} ({s}/24)" for d, s in moderate_domains])
-        pdf.multi_cell(0, 6, f"{mod_str} all fall in the Moderate Relative range.", border="LBR", fill=True, new_x="LMARGIN", new_y="NEXT")
-        
-    if len(strength_domains) > 0:
-        pdf.ln(5)
-        pdf.set_font("Arial", "B", 14)
-        pdf.set_text_color(*GREEN_TEXT)
-        pdf.cell(0, 10, "Areas of relative strength", new_x="LMARGIN", new_y="NEXT")
-        
-        pdf.set_fill_color(*GREEN_BG)
-        pdf.set_draw_color(*GREEN_TEXT)
-        
-        str_domains = ", ".join([f"{d} (0/24)" for d in strength_domains])
-        pdf.set_font("Arial", "", 11)
-        pdf.set_text_color(0, 0, 0)
-        pdf.multi_cell(0, 6, f"{str_domains} shows no endorsement at all.\nThese are encouraging signs -- the student appears to be maintaining connection and does not report these as a coping strategy.", border=1, fill=True, new_x="LMARGIN", new_y="NEXT")
-
-    pdf.set_line_width(0.2)
-    pdf.set_draw_color(0, 0, 0)
-    
-    pdf.ln(5)
-        
+    # 2. Recommended Support Plan
+    pdf.ln(2)
     pdf.set_font("Arial", "B", 14)
     pdf.set_text_color(40, 100, 80)
     pdf.cell(0, 10, "Recommended Support Plan", new_x="LMARGIN", new_y="NEXT")
     
-    pdf.set_fill_color(30, 80, 80)
-    pdf.set_text_color(255, 255, 255)
-    pdf.set_font("Arial", "B", 10)
-    pdf.cell(40, 10, "Priority", border=1, fill=True, align="L")
-    pdf.cell(150, 10, "Recommended Direction", border=1, fill=True, align="L", new_x="LMARGIN", new_y="NEXT")
+    # Generate bullet texts directly from RECOMMENDATIONS dictionary
+    bullets = []
     
-    pdf.set_font("Arial", "", 10)
+    # We will output recommendations for all domains based on their specific band
+    domain_list = ['Anxiety', 'Depression', 'Suicidal Ideation', 'Substance Abuse', 'Self-Esteem Problems', 'Interpersonal Problems', 'Family Problems', 'Academic Stress', 'Career Concerns']
     
-    def draw_support_row(priority, text, color):
-        pdf.set_font("Arial", "", 10)
-        h = pdf.get_multi_cell_height(150, 6, text) + 4
-        
-        x_before = pdf.get_x()
+    for d, b in zip(domain_list, bands):
+        # Substance abuse has special logic in bands sometimes ('Any reported concern' or 'None')
+        # We need to map it back to the dictionary keys if it doesn't match
+        if d == 'Substance Abuse':
+            if b == 'Any reported concern':
+                b = 'Higher Relative' # Fallback for dict mapping if needed
+            elif b == 'None':
+                b = 'Lower Relative'
+                
+        rec = RECOMMENDATIONS.get(d, {}).get(b, "")
+        if rec:
+            # bullets.append(f"{d}: {rec}")
+            bullets.append(f"●  {rec}")
+            
+    # Draw Bullet Table
+    pdf.set_draw_color(224, 238, 238) # Light blue/teal border
+    pdf.set_line_width(0.3)
+    
+    x_start = 15
+    pdf.set_x(x_start)
+    
+    pdf.line(x_start, pdf.get_y(), 195, pdf.get_y())
+    
+    for i, bullet in enumerate(bullets):
+        # Check if we need a page break manually
+        h = pdf.get_multi_cell_height(168, 6, bullet) + 8
+        if pdf.get_y() + h > 270:
+            pdf.add_page()
+            pdf.set_y(20)
+            pdf.line(x_start, pdf.get_y(), 195, pdf.get_y())
+            
         y_before = pdf.get_y()
-        
-        pdf.set_text_color(*color)
-        pdf.set_font("Arial", "B", 10)
-        pdf.rect(x_before, y_before, 40, h, 'D')
-        pdf.set_xy(x_before + 2, y_before + 2)
-        pdf.cell(36, 6, priority, align="L")
-        
-        pdf.set_xy(x_before + 40, y_before)
-        pdf.set_text_color(0, 0, 0)
         pdf.set_font("Arial", "", 10)
-        pdf.rect(x_before + 40, y_before, 150, h, 'D')
-        pdf.set_xy(x_before + 42, y_before + 2)
-        pdf.multi_cell(146, 6, text, align="L")
-        pdf.set_xy(x_before, y_before + h)
+        pdf.set_text_color(0, 0, 0)
+        
+        
+        pdf.set_xy(x_start + 6, y_before + 4)
+        pdf.cell(5, 6, chr(149))
+        
+        # We manually change the left margin to ensure the hanging indent
+        original_lmargin = pdf.l_margin
+        text_x = x_start + 13
+        pdf.set_left_margin(text_x)
+        pdf.set_xy(text_x, y_before + 4)
+        
+        # Render text block
+        pdf.multi_cell(195 - text_x, 6, bullet)
+        
+        # Restore margin
+        pdf.set_left_margin(original_lmargin)
+        
+        actual_y = max(y_before + h, pdf.get_y() + 4)
+        pdf.set_y(actual_y)
+        # Draw bottom separator line ONLY (no side borders)
+        pdf.line(x_start, pdf.get_y(), 195, pdf.get_y())
+        
+    pdf.ln(10)
+    
+    # 3. Color Coding Legend
+    pdf.set_font("Arial", "B", 10)
+    pdf.set_text_color(255, 0, 0)
+    pdf.cell(0, 6, "Color Coding:", new_x="LMARGIN", new_y="NEXT")
+    pdf.set_y(pdf.get_y() - 1)
+    pdf.set_text_color(0, 0, 0)
+    pdf.cell(0, 6, "1. Orange - Higher Relative", new_x="LMARGIN", new_y="NEXT")
+    pdf.cell(0, 6, "2. Purple - Moderate Relative", new_x="LMARGIN", new_y="NEXT")
+    pdf.cell(0, 6, "3. Blue - Mild Relative", new_x="LMARGIN", new_y="NEXT")
+    pdf.cell(0, 6, "4. Green - Lower Relative", new_x="LMARGIN", new_y="NEXT")
+    
+    pdf.ln(5)
 
-    for d, s in higher_domains:
-        draw_support_row("High", f"{d}-focused check-in: understand current expectations and available support.", RED_TEXT)
-        
-    for d, s in moderate_domains:
-        draw_support_row("Moderate", f"Explore {d.lower()} in relation to adjustment and coping strategies already in use.", ORANGE_TEXT)
-        
-    draw_support_row("Ongoing", "Build on existing strengths and identify further protective factors and goals.", (40, 140, 100))
 
     # ---------------- PAGE 6 ----------------
     pdf.add_page()
@@ -622,21 +623,23 @@ def create_v2_report(filepath, student_name, course, year, institute, scores, ba
 
     # Contact Info at bottom of Page 6
     pdf.set_y(pdf.get_y() + 10)
-    pdf.set_font("Arial", "B", 12)
+    pdf.set_font("Arial", "BI", 12)
     pdf.set_text_color(90, 107, 112)
     pdf.cell(0, 8, "Recommendations", new_x="LMARGIN", new_y="NEXT")
-    
+
+    # Push the rest to the bottom
+    pdf.set_y(260)
     pdf.set_font("Arial", "I", 9)
-    pdf.cell(0, 5, "For more information, contact us:", new_x="LMARGIN", new_y="NEXT")
-    
+    pdf.cell(0, 5, "For more information, contact us:", align="C", new_x="LMARGIN", new_y="NEXT")
+
     pdf.set_font("Arial", "B", 9.5)
     pdf.set_text_color(30, 95, 90)
-    pdf.cell(0, 5, "acrocare@acropolis.in   .   9630990027", new_x="LMARGIN", new_y="NEXT")
-    
+    pdf.cell(0, 5, "acrocare@acropolis.in   .   9630990027", align="C", new_x="LMARGIN", new_y="NEXT")
+
     pdf.set_font("Arial", "", 8)
     pdf.set_text_color(90, 107, 112)
-    pdf.cell(0, 5, "Acropolis Group of Institutions, Indore", new_x="LMARGIN", new_y="NEXT")
-    
+    pdf.cell(0, 5, "Acropolis Group of Institutions, Indore", align="C", new_x="LMARGIN", new_y="NEXT")
+
     # ---------------- PAGE 7 ----------------
     if pdf.page_no() < 7:
         pdf.add_page()

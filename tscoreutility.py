@@ -1,7 +1,10 @@
+from tqdm import tqdm
 import config
 import csv
 import os
 import openpyxl as op
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from dirutility import create_dir
 
@@ -407,29 +410,36 @@ def Graph_Of_Tscores(Y_Axis_tscore, Student_Data, i, directory_path, version='v1
         X_Axis_Names = ['Anxiety','Depression','Suicidal Ideation','Substance Abuse','Self-esteem Problems','Interpersonal Problems','Family Problems','Academic Problems','Career Problems']
         y_lim = 80
 
-    plt.rcParams['figure.figsize']=(8,5)        #Size(Area) of Graph
-    plt.figure(facecolor="#BFEFFF")             #Background Color
+    plt.rcParams['figure.figsize']=(8,5)
+    plt.figure(facecolor="white")
 
     # Y_Axis_tscore includes the combined score at the end in V2, so we slice it to 9.
     Y_Axis_tscore = Y_Axis_tscore[:9]
+
+    plt.plot(X_Axis_Names, Y_Axis_tscore, color="#1f77b4", marker='o') # Blue line
+    plt.ylim(0, y_lim)
     
-    plt.plot(X_Axis_Names,Y_Axis_tscore,color="red",marker='o') #Plot graph
-    plt.ylim(0,y_lim)
-    plt.xticks(rotation=50,ha="center")
-    plt.gcf().subplots_adjust(bottom=0.286)     #Adjusting(cutting) the X-Axis names
-    plt.grid(alpha=0.7)                         #For grid
+    plt.title("Assessment Summary - Domain Scores", fontweight="bold", fontsize=11)
+    plt.ylabel(f"Score (out of {y_lim})", fontsize=9)
+    plt.xlabel("Domain", fontsize=9)
+    
+    plt.xticks(rotation=40, ha="right", fontsize=8)
+    plt.yticks(fontsize=8)
+    plt.gcf().subplots_adjust(bottom=0.25)
+    
+    plt.grid(axis='y', alpha=0.3)
 
     for k in range(len(X_Axis_Names)):
-        plt.text(k,Y_Axis_tscore[k],Y_Axis_tscore[k],ha='center',va="bottom")   #For Adding value in line 
-        
+        plt.text(k, Y_Axis_tscore[k] + 0.5, str(Y_Axis_tscore[k]), ha='center', va="bottom", fontweight="bold", fontsize=8)
+
     Graph_Name = Student_Data[i][0] + str(i) + ".png"
-    # plt.savefig(directory_path + '/' + Student_Data[i][0] + str(i) + ".png",bbox_inches="tight")
     plt.savefig(os.path.join(directory_path, Graph_Name), bbox_inches="tight")
+    plt.close()
 
     return Graph_Name
 
 
-def Plot_Graphs(TScores, Student_Data, version='v1'):
+def Plot_Graphs(TScores, Student_Data, version='v1', ui_callback=None):
     """Returns a dictionary of Student-Name:Image-file pair"""
     Total_rows = len(TScores)      #Total no. of rows in Data
     Total_cols = len(TScores[0])   #Total no. of coloms in Data
@@ -439,6 +449,11 @@ def Plot_Graphs(TScores, Student_Data, version='v1'):
     folder = create_dir(config.TEMPDIR)
     Graphs = {}
     for i in range(1,Total_rows):
+        if ui_callback:
+            try:
+                ui_callback(i, Total_rows - 1, f"Plotting Graph {i} of {Total_rows - 1}")
+            except:
+                pass
         Y_Axis_tscore = []
         for j in range(0,Total_cols):
             Y_Axis_tscore.append(TScores[i][j])

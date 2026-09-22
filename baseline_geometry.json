@@ -1,0 +1,62 @@
+{
+    "button_browse": {
+        "x": 10,
+        "y": 100,
+        "width": 331,
+        "height": 46
+    },
+    "button_upload": {
+        "x": 10,
+        "y": 556,
+        "width": 331,
+        "height": 46
+    },
+    "button_generate": {
+        "x": 935,
+        "y": 105,
+        "width": 143,
+        "height": 26
+    },
+    "button_view": {
+        "x": 935,
+        "y": 158,
+        "width": 143,
+        "height": 26
+    },
+    "button_delete": {
+        "x": 935,
+        "y": 203,
+        "width": 143,
+        "height": 26
+    },
+    "button_downall": {
+        "x": 935,
+        "y": 248,
+        "width": 143,
+        "height": 26
+    },
+    "button_viewsum": {
+        "x": 935,
+        "y": 298,
+        "width": 143,
+        "height": 26
+    },
+    "button_savecopy": {
+        "x": 935,
+        "y": 341,
+        "width": 143,
+        "height": 41
+    },
+    "button_clearbox": {
+        "x": 1015,
+        "y": 12,
+        "width": 63,
+        "height": 26
+    },
+    "button_order": {
+        "x": 1049,
+        "y": 520,
+        "width": 29,
+        "height": 26
+    }
+}

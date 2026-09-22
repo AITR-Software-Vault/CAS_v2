@@ -88,4 +88,4 @@ Required an excel or csv file where columns should be:
 * Kushagra Mehrotra   (IMCA 2019 batch)  
 * Lakshya Verma       (Btech IT 2028)
 
-Made by students at Acropolis FCA Department
+Made by students at Acropolis FCA and IT Department
