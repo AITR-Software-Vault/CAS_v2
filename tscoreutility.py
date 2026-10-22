@@ -120,16 +120,25 @@ def Detect_Version_And_Offsets(data):
         else:
             raise ValueError(f"Could not detect question start index. Total non-empty columns: {len(non_empty_headers)}")
             
-    actual_question_count = len(non_empty_headers) - question_start_idx
+    # Count exactly how many columns look like questions
+    actual_question_count = sum(1 for h in headers if 'question' in str(h).strip().lower())
+    
     if actual_question_count == 54:
         version = 'v2'
     elif actual_question_count == 108:
         version = 'v1'
     else:
-        raise ValueError(
-            f"Unsupported questionnaire structure: "
-            f"{actual_question_count} question columns detected"
-        )
+        # Fallback to positional calculation if "QUESTION" string wasn't reliable
+        positional_count = len(non_empty_headers) - question_start_idx
+        if positional_count == 54:
+            version = 'v2'
+        elif positional_count == 108:
+            version = 'v1'
+        else:
+            raise ValueError(
+                f"Unsupported questionnaire structure: "
+                f"{positional_count} question columns detected"
+            )
         
     return version, question_start_idx, len(non_empty_headers)
 
@@ -156,10 +165,8 @@ def Scores_v2(value):
     return normalize_response(value)
 
 def get_band_v2(domain_code, score):
-    if domain_code == 'SA':
-        return 'Any reported concern' if score > 0 else 'None'
-    
     bands = {
+        'SA': [(4, 'Lower'), (9, 'Mild'), (15, 'Moderate'), (24, 'Higher')],
         'AN': [(5, 'Lower'), (9, 'Mild'), (14, 'Moderate'), (24, 'Higher')],
         'DP': [(4, 'Lower'), (8, 'Mild'), (14, 'Moderate'), (24, 'Higher')],
         'SI': [(0, 'Lower'), (2, 'Mild'), (5, 'Moderate'), (24, 'Higher')],
@@ -174,7 +181,7 @@ def get_band_v2(domain_code, score):
             return label
     return 'Higher'
 
-def Tscores_And_Students_ImpData(RawData, version=None, question_start_idx=None, total_non_empty_cols=None):
+def Tscores_And_Students_ImpData(RawData, version=None, question_start_idx=None, total_non_empty_cols=None, col_map=None):
     if version is None:
         version, question_start_idx, total_non_empty_cols = Detect_Version_And_Offsets(RawData)
     Total_rows = len(RawData)
@@ -192,21 +199,47 @@ def Tscores_And_Students_ImpData(RawData, version=None, question_start_idx=None,
         T_Scores_Of_All_Students = [['T-AN','T-DP','T-SI','T-SA','T-SE','T-IP','T-FP','T-AP','T-CP']]
 
     for i in range(0,Total_rows):
-        student = []                                
-        OneRowQuestions = []                        
+        student = []
+        OneRowQuestions = []
         for j in range(0,Total_cols):
             if j < question_start_idx:
-                # Standardize to 13 columns for V1 compat if needed?
-                # Actually, main.py/reportutility assumes student_data is a certain length.
-                # In V1, student metadata is stored from col 3 to 12. So length was 10.
-                # Wait! 'student' originally was populated with: `for j in range(3, Total_cols): if j<13: student.append(...)`
-                # So it skipped 0, 1, 2!
-                # We should mimic that exactly if it's V1.
                 if version == 'v1' and j < 3:
                     continue
                 student.append(RawData[i][j])
             else:
-                OneRowQuestions.append(RawData[i][j])    
+                OneRowQuestions.append(RawData[i][j])
+                
+        if version == 'v2' and col_map:
+            OneRowQuestions = [RawData[i][col_map['questions'][q_num]] for q_num in range(1, 55)]
+            meta = col_map['metadata']
+            if i == 0:
+                student = ["Name", "Age", "Institute", "Course", "Year", "Email", "Mobile", "Gender", "Guardian", "Income"]
+            else:
+                name_idx = meta.get('name', -1)
+                age_idx = meta.get('age', -1)
+                inst_idx = meta.get('institute', -1)
+                course_idx = meta.get('course', -1)
+                year_idx = meta.get('year', -1)
+                
+                email_idx = meta.get('email', -1)
+                mobile_idx = meta.get('mobile', -1)
+                gender_idx = meta.get('gender', -1)
+                guardian_idx = meta.get('guardian', -1)
+                income_idx = meta.get('income', -1)
+                
+                student = [
+                    RawData[i][name_idx] if name_idx != -1 else '',
+                    RawData[i][age_idx] if age_idx != -1 else '',
+                    RawData[i][inst_idx] if inst_idx != -1 else '',
+                    RawData[i][course_idx] if course_idx != -1 else '',
+                    RawData[i][year_idx] if year_idx != -1 else '',
+                    RawData[i][email_idx] if email_idx != -1 else '',
+                    RawData[i][mobile_idx] if mobile_idx != -1 else '',
+                    RawData[i][gender_idx] if gender_idx != -1 else '',
+                    RawData[i][guardian_idx] if guardian_idx != -1 else '',
+                    RawData[i][income_idx] if income_idx != -1 else ''
+                ]
+
         Student_Imp_Data.append(student)
         AllQuestions.append(OneRowQuestions)
 
@@ -218,18 +251,32 @@ def Tscores_And_Students_ImpData(RawData, version=None, question_start_idx=None,
         
         if version == 'v2':
             # V2 has 54 questions, 6 per domain
-            raw_responses = [RawData[i][col] for col in range(question_start_idx, Total_cols)]
+            if col_map:
+                raw_responses = [RawData[i][col_map['questions'][q_num]] for q_num in range(1, 55)]
+            else:
+                raw_responses = [RawData[i][col] for col in range(question_start_idx, Total_cols)]
             # Assertions
             is_valid = True
             errors = []
-            
-            try:
-                numeric_responses = [Scores_v2(val) for val in raw_responses]
-            except Exception as e:
+            numeric_responses = []
+            missing_questions = []
+
+            for q_idx, val in enumerate(raw_responses, start=1):
+                val_str = str(val).strip().lower()
+                if val is None or val_str in ['', 'none', 'nan']:
+                    missing_questions.append(f"Q{q_idx}")
+                    numeric_responses.append(0)
+                    continue
+                try:
+                    numeric_responses.append(Scores_v2(val))
+                except Exception as e:
+                    missing_questions.append(f"Q{q_idx}")
+                    numeric_responses.append(0)
+
+            if missing_questions:
                 is_valid = False
-                errors.append(str(e))
-                numeric_responses = [0]*54
-            
+                errors.append("Unanswered questions detected.")
+                
             if len(numeric_responses) != 54:
                 is_valid = False
                 errors.append(f"Expected 54 responses, got {len(numeric_responses)}")
@@ -262,11 +309,10 @@ def Tscores_And_Students_ImpData(RawData, version=None, question_start_idx=None,
             student_data = [RawData[i][col] for col in range(question_start_idx)]
             header_data = [str(RawData[0][col]).lower().strip() for col in range(question_start_idx)]
             
-            name_idx = -1
-            for exact_match in ["student name", "full name", "respondent name", "name"]:
-                if exact_match in header_data:
-                    name_idx = header_data.index(exact_match)
-                    break
+            if col_map:
+                name_idx = col_map['metadata'].get('name', -1)
+            else:
+                name_idx = header_indices.get('name', -1)
             
             if name_idx == -1:
                 is_valid = False
@@ -292,10 +338,7 @@ def Tscores_And_Students_ImpData(RawData, version=None, question_start_idx=None,
                     score = sum(numeric_responses[q - 1] for q in domain_mapping[d])
                     domain_scores[d] = score
                     band = get_band_v2(domain_codes[d], score)
-                    if d == 'Substance Abuse':
-                        domain_bands[d] = 'Any reported concern' if score > 0 else 'None'
-                    else:
-                        domain_bands[d] = f"{band} Relative"
+                    domain_bands[d] = f"{band} Relative"
                 
                 combined_score = sum(numeric_responses)
                 
@@ -346,7 +389,8 @@ def Tscores_And_Students_ImpData(RawData, version=None, question_start_idx=None,
                 "validation": {
                     "is_valid": is_valid,
                     "errors": errors,
-                    "warnings": []
+                    "warnings": [],
+                    "missing_questions": missing_questions
                 },
                 "audit_trace": audit_trace
             }
@@ -417,7 +461,7 @@ def Graph_Of_Tscores(Y_Axis_tscore, Student_Data, i, directory_path, version='v1
     Y_Axis_tscore = Y_Axis_tscore[:9]
 
     plt.plot(X_Axis_Names, Y_Axis_tscore, color="#1f77b4", marker='o') # Blue line
-    plt.ylim(0, y_lim)
+    plt.ylim(0, y_lim+3)
     
     plt.title("Assessment Summary - Domain Scores", fontweight="bold", fontsize=11)
     plt.ylabel(f"Score (out of {y_lim})", fontsize=9)
@@ -459,7 +503,7 @@ def Plot_Graphs(TScores, Student_Data, version='v1', ui_callback=None):
             Y_Axis_tscore.append(TScores[i][j])
         # List_Of_Graphs.append(Graph_Of_Tscores(Y_Axis_tscore,Student_Data,i))  #For Making graph of row student
         
-        Graphs[Student_Data[i][0]] = Graph_Of_Tscores(Y_Axis_tscore,Student_Data,i,folder, version=version)
+        Graphs[i] = Graph_Of_Tscores(Y_Axis_tscore,Student_Data,i,folder, version=version)
     
     # return List_Of_Graphs
     

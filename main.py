@@ -178,10 +178,21 @@ def Perform_File_Operations(data_sheet: str, survey_id: int, survey_name: str, u
         print("unrecognized file")
         return 0
     
-    # Infer version dynamically
+    import validator
+    is_valid, col_map, errors = validator.validate_file_structure(data[0])
+    
+    if not is_valid:
+        error_msg = "File validation failed. Please correct the following issues:\n\n"
+        for i, err in enumerate(errors, start=1):
+            error_msg += f"{i}. {err}\n"
+        
+        messagebox.showerror("Upload could not be completed", error_msg)
+        return 0
+
+    # Infer version dynamically (still needed for some legacy hooks)
     version, question_start_idx, total_non_empty_cols = tsc.Detect_Version_And_Offsets(data)
 
-    tscdata, studata, allquestions, rawscores, scoring_results = tsc.Tscores_And_Students_ImpData(data, version, question_start_idx, total_non_empty_cols)
+    tscdata, studata, allquestions, rawscores, scoring_results = tsc.Tscores_And_Students_ImpData(data, version, question_start_idx, total_non_empty_cols, col_map)
     print("INFO: parsed data (version: " + version + ")")
     
     if (debug_setting):
@@ -258,7 +269,7 @@ def Generate_Action(tree: tk.ttk.Treeview, treeselection: list):
 
     # SQLite objects created in a thread can only be used in that same thread
     try:
-        con1 = sqlite3.connect(config.DB)
+        con1 = sqlite3.connect(config.DB, timeout=15)
         cur = con1.cursor()
         # print("Slected items length = ", len(tree.selection()))
         print("Slected items length = ", len(treeselection))
@@ -283,22 +294,45 @@ def Generate_Action(tree: tk.ttk.Treeview, treeselection: list):
                     busyframe.progress_var.set((current / total) * 100)
                 busyframe.update_idletasks()
             
-            print("Success? \t",
-                Perform_File_Operations(fname, item_id, survey_name, ui_callback=ui_callback))
+            result = Perform_File_Operations(fname, item_id, survey_name, ui_callback=ui_callback)
+            print("Success? 	", result)
+            
+            # Show summary
+            if isinstance(result, dict):
+                comp = result.get('complete', 0)
+                incomp = result.get('incomplete', 0)
+                csv_path = result.get('csv_path')
+                
+                if incomp > 0:
+                    msg = f"Processing completed.\n\nComplete students processed: {comp}\nStudents with unanswered questions: {incomp}\n"
+                    if csv_path and not csv_path.startswith("ERROR"):
+                        msg += f"Incomplete-response report saved to:\nincomplete_responses.csv\n\nPlease review the CSV file for the affected students and missing questions."
+                    else:
+                        msg += f"Failed to save CSV: {csv_path}"
+                    messagebox.showinfo("Reports Generated with Incomplete Responses", msg)
+                else:
+                    messagebox.showinfo("Reports Generated", "Processing completed successfully. No unanswered responses were found.")
+                    messagebox.showinfo("Reports Generated", "Processing completed successfully. No unanswered responses were found.")
+            elif result == 1:
+                messagebox.showinfo("Reports Generated", "Successfully generated reports.")
+            # If result == 0, it means it failed validation early, so we don't show success.
+
     except Exception as e:
         # logging.error(traceback.format_exc())
         # log_error(traceback.format_exc())
         # log_error(str(e))
         log_error(e, traceback.format_exc())
         print("ERRORRRR: ", e)
-        messagebox.showerror("Error", "Unable to generate reports.")
+        if isinstance(e, ValueError) and "CSV format is unacceptable" in str(e):
+            messagebox.showerror("Format Error", str(e))
+        else:
+            messagebox.showerror("Error", f"Unable to generate reports.\n\nDetails: {str(e)}")
         raise e
     finally:
         con1.close()
         busyframe.grab_release()
         rootwindow.deiconify()
         busyframe.destroy()
-        messagebox.showinfo("Done", "Reports generated!")
         disableButtons()
 
 
@@ -352,7 +386,11 @@ def clearInputs():
 
 def Upload_Action():
     global inputs
-    
+    now = datetime.now()
+    pick_day = tk.StringVar(value=now.strftime("%d"))  # e.g., "23"
+    pick_month = tk.StringVar(value=now.strftime("%B"))  # e.g., "September"
+    pick_year = tk.StringVar(value=now.strftime("%Y"))  # e.g., "2026"
+    timevalue = tk.StringVar(value=now.strftime("%H:%M"))  # e.g., "16:17"
     date = f"{pick_day.get()} {pick_month.get()} {pick_year.get()} {timevalue.get()}"
 
     if debug_setting:
@@ -404,7 +442,7 @@ def Upload_Report(data: list):
     cryptic_filename = dutil.upload_to_raw_folder(data[-2], data[0], data[-1])
     data[-2] = cryptic_filename
 
-    con1 = con or sqlite3.connect(config.DB)
+    con1 = con or sqlite3.connect(config.DB, timeout=15)
     cur = con1.cursor()
     cur.execute("""INSERT INTO 
         tblSurveySheets(survey_name, survey_time, institute, department, 
@@ -442,9 +480,9 @@ def updateView(event=None):
     for item in tree.get_children():
        tree.delete(item)
 
-    # con1 = sqlite3.connect(config.DB)
+    # con1 = sqlite3.connect(config.DB, timeout=15)
     print(con)
-    con1 = con or sqlite3.connect(config.DB)
+    con1 = con or sqlite3.connect(config.DB, timeout=15)
     cur1 = con1.cursor()
     cur1.execute("""SELECT * FROM tblSurveySheets WHERE survey_name LIKE ? 
         or institute LIKE ? or department LIKE ? COLLATE NOCASE ORDER BY """ +
@@ -555,12 +593,13 @@ def View_Reports():
             #     str(pathlib.Path(config.REPORTSFOL) / folder_name / pdf_file)), 
                 # shell=True)
             print(f"{pdf_path=}")
-            subprocess.Popen([pdf_path], shell=True)
+            import os
+            os.startfile(pdf_path)
             # subprocess.run([pdf_path], shell=True)
             # subprocess.call([pdf_path], shell=True)
     
     def updateStudentView(treeobj, surveyid, filtertxt=""):
-        con1 = con or sqlite3.connect(config.DB)
+        con1 = con or sqlite3.connect(config.DB, timeout=15)
         cur = con1.cursor()
         filtertxt = '%'+filtertxt+'%'
         cur.execute("""SELECT student_codename, tot_problem_areas, 
@@ -596,7 +635,7 @@ def View_Reports():
         item = tree.item(treeItemId)['values']
         surveyid = item[-1]
 
-        con1 = con or sqlite3.connect(config.DB)
+        con1 = con or sqlite3.connect(config.DB, timeout=15)
         cur = con1.cursor()
         cur.execute("""SELECT file FROM tblSurveySheets WHERE id = ?""", 
             (surveyid,))
@@ -681,7 +720,7 @@ def Delete_Reports():
         # for itemid in tree.selection():
         for itemid in selected_items:
             surveyid = tree.item(itemid)['values'][-1]
-            con1 = con or sqlite3.connect(config.DB)
+            con1 = con or sqlite3.connect(config.DB, timeout=15)
             cur = con1.cursor()
             cur.execute("""SELECT file from tblSurveySheets WHERE id=?""", 
                 (surveyid,))
@@ -855,7 +894,7 @@ if __name__ == '__main__':
     # SQL interface
     if not os.path.exists(config.DBLOC):
         os.mkdir(config.DBLOC)
-    con = sqlite3.connect(config.DB)
+    con = sqlite3.connect(config.DB, timeout=15)
     con.execute("PRAGMA foreign_keys = ON")
     cur = con.cursor()
     # cur.execute("""DROP TABLE IF EXISTS tblSurveySheets""")
@@ -1005,9 +1044,11 @@ if __name__ == '__main__':
     pick_year.pack(side='left', padx=(PX//2), pady=PY)
     input_time.pack(side='left', padx=PX, pady=PY)
 
-    pick_day.current(0)
-    pick_month.current(0)
-    pick_year.current(0)
+    from datetime import datetime
+    now = datetime.now()
+    pick_day.set(now.day)
+    pick_month.set(now.strftime("%b"))
+    pick_year.set(now.year)
 
     label_institute.grid(column=0, row=7, pady=(PY,0), sticky=tk.W+tk.E)
     pick_institute.grid(column=0, row=8, sticky=tk.W+tk.E)
@@ -1090,6 +1131,9 @@ if __name__ == '__main__':
     button_savecopy = ttk.Button(rootwindow, style="Secondary.TButton", takefocus=False,
                         text = 'SAVE A COPY OF \nSUMMARY', state='disabled',
                         command=Copy_Summary)
+    button_openworkspace = ttk.Button(rootwindow, style="Primary.TButton", takefocus=False,
+                        text = '📂 OPEN WORKSPACE FOLDER', 
+                        command=lambda: __import__('os').startfile(config.BASE_USER_DIR))
     button_clearbox = ttk.Button(rootwindow, style="Secondary.TButton", takefocus=False,
                         text = 'clear filter', command=Clear_Filter)
     button_order    = ttk.Button(rootwindow, style="Secondary.TButton", takefocus=False,
@@ -1102,6 +1146,7 @@ if __name__ == '__main__':
     button_downall.grid(column=7, row=5, sticky=tk.E+tk.W, padx=PX)
     button_viewsum.grid(column=7, row=6, sticky=tk.E+tk.W, padx=PX)
     button_savecopy.grid(column=7, row=7, sticky=tk.E+tk.W, padx=PX)
+    button_openworkspace.grid(column=7, row=8, sticky=tk.E+tk.W, padx=PX, pady=(20, 0))
 
     label_associatedfile.grid(column=3, row=15, columns=4, 
                             sticky=tk.N+tk.W+tk.E+tk.S, padx=PX, pady=PY)

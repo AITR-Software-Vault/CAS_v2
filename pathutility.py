@@ -28,9 +28,29 @@ def font_path(filename: str) -> Path:
     return FONT_DIR / filename
 
 def get_output_dir() -> Path:
-    output_dir = Path.home() / "Documents" / "AutoCAS Reports"
-    output_dir.mkdir(parents=True, exist_ok=True)
-    return output_dir
+    try:
+        # Try true Windows API to get the real Documents folder (handles OneDrive/Localization)
+        import ctypes.wintypes
+        CSIDL_PERSONAL = 5       # My Documents
+        SHGFP_TYPE_CURRENT = 0   
+        buf = ctypes.create_unicode_buffer(ctypes.wintypes.MAX_PATH)
+        ctypes.windll.shell32.SHGetFolderPathW(None, CSIDL_PERSONAL, None, SHGFP_TYPE_CURRENT, buf)
+        if buf.value:
+            output_dir = Path(buf.value) / "AutoCAS Reports"
+            output_dir.mkdir(parents=True, exist_ok=True)
+            return output_dir
+    except Exception:
+        pass
+        
+    try:
+        output_dir = Path.home() / "Documents" / "AutoCAS Reports"
+        output_dir.mkdir(parents=True, exist_ok=True)
+        return output_dir
+    except Exception:
+        # Fallback to the User's root home directory
+        output_dir = Path.home() / "AutoCAS Reports"
+        output_dir.mkdir(parents=True, exist_ok=True)
+        return output_dir
 
 def validate_rgba_transparency(path: Path):
     try:

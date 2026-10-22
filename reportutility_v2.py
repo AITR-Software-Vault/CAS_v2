@@ -43,10 +43,10 @@ RECOMMENDATIONS = {
         'Higher Relative': 'Urgent professional safety assessment and immediate follow-up are required. The appropriate response should be determined through direct assessment and institutional protocol.'
     },
     'Substance Abuse': {
-        'Lower Relative': 'A confidential, non-judgmental counselling discussion is recommended to understand the nature, frequency, context, and functional impact of substance use. Psychoeducation on healthier coping strategies is also recommended.',
-        'Mild Relative': 'Professional review and individualized support are recommended to explore patterns, triggers, consequences, and available referral options',
-        'Moderate Relative':'Professional review and individualized support are recommended to explore patterns, triggers, consequences, and available referral options',
-        'Higher Relative': 'Supportive guidance, motivational conversations, and referral to an appropriate qualified professional or de-addiction service are recommended where indicated'
+        'Lower Relative': 'Encourage a confidential, non-judgmental counsellor discussion to understand the nature, frequency, context, and functional impact of substance use. Provide psychoeducation on healthier coping strategies.',
+        'Mild Relative': 'Recommend professional review and individualized support to explore patterns, triggers, consequences, and available referral options.',
+        'Moderate Relative': 'Recommend professional review and individualized support to explore patterns, triggers, consequences, and available referral options.',
+        'Higher Relative': 'Offer supportive guidance, motivational conversations, and referral to an appropriate qualified professional or de-addiction service where indicated.'
     },
     'Self-Esteem Problems': {
         'Lower Relative': 'Self-awareness, recognition of strengths, healthy self-talk, and meaningful activities are recommended.',
@@ -511,6 +511,9 @@ def create_v2_report(filepath, student_name, course, year, institute, scores, ba
             pdf.set_font("Arial", "", 11)
             h = pdf.get_multi_cell_height(176, 5, desc) + 14
 
+            if pdf.get_y() + h > 275:
+                pdf.add_page()
+
             y_box = pdf.get_y()
             pdf.set_fill_color(252, 239, 212) # #fcefd4
             pdf.set_draw_color(232, 147, 91)  # #e8935b
@@ -534,7 +537,7 @@ def create_v2_report(filepath, student_name, course, year, institute, scores, ba
         pdf.ln(8)
 
     # 2. Recommended Support Plan
-    pdf.ln(2)
+    pdf.add_page()
     pdf.set_font("Arial", "B", 14)
     pdf.set_text_color(40, 100, 80)
     pdf.cell(0, 10, "Recommended Support Plan", new_x="LMARGIN", new_y="NEXT")
@@ -604,15 +607,15 @@ def create_v2_report(filepath, student_name, course, year, institute, scores, ba
     pdf.ln(10)
     
     # 3. Color Coding Legend
-    pdf.set_font("Arial", "B", 10)
-    pdf.set_text_color(255, 0, 0)
-    pdf.cell(0, 6, "Color Coding:", new_x="LMARGIN", new_y="NEXT")
-    pdf.set_y(pdf.get_y() - 1)
-    pdf.set_text_color(0, 0, 0)
-    pdf.cell(0, 6, "1. Orange - Higher Relative", new_x="LMARGIN", new_y="NEXT")
-    pdf.cell(0, 6, "2. Purple - Moderate Relative", new_x="LMARGIN", new_y="NEXT")
-    pdf.cell(0, 6, "3. Blue - Mild Relative", new_x="LMARGIN", new_y="NEXT")
-    pdf.cell(0, 6, "4. Green - Lower Relative", new_x="LMARGIN", new_y="NEXT")
+    # pdf.set_font("Arial", "B", 10)
+    # pdf.set_text_color(255, 0, 0)
+    # pdf.cell(0, 6, "Color Coding:", new_x="LMARGIN", new_y="NEXT")
+    # pdf.set_y(pdf.get_y() - 1)
+    # pdf.set_text_color(0, 0, 0)
+    # pdf.cell(0, 6, "1. Orange - Higher Relative", new_x="LMARGIN", new_y="NEXT")
+    # pdf.cell(0, 6, "2. Purple - Moderate Relative", new_x="LMARGIN", new_y="NEXT")
+    # pdf.cell(0, 6, "3. Blue - Mild Relative", new_x="LMARGIN", new_y="NEXT")
+    # pdf.cell(0, 6, "4. Green - Lower Relative", new_x="LMARGIN", new_y="NEXT")
     
     pdf.ln(5)
 
@@ -625,7 +628,7 @@ def create_v2_report(filepath, student_name, course, year, institute, scores, ba
     pdf.set_y(pdf.get_y() + 10)
     pdf.set_font("Arial", "BI", 12)
     pdf.set_text_color(90, 107, 112)
-    pdf.cell(0, 8, "Recommendations", new_x="LMARGIN", new_y="NEXT")
+    # pdf.cell(0, 8, "Recommendations", new_x="LMARGIN", new_y="NEXT")
 
     # Push the rest to the bottom
     pdf.set_y(260)
